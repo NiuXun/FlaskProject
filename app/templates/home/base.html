@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link rel="icon" href="https://v3.bootcss.com/favicon.ico">
+
+        <title>{% block title %}{% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='home/font-awesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/animate.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/bootstrap-switch.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/checkbox3.min.css') }}">
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='home/css/jquery.dataTables.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/dataTables.bootstrap.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/css/select2.min.css') }}">
+
+        {% block base_site_css %}{% endblock %}
+
+        {% block other_css %}{% endblock %}
+
+    </head>
+
+    <body {% block body_class %}{% endblock %}>
+
+        {% block body %}{% endblock %}
+
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/jquery-3.3.1.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/Chart.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/bootstrap-switch.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/jquery.matchHeight-min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/jquery.dataTables.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/dataTables.bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/select2.full.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/ace/ace.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/ace/mode-html.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='home/js/ace/theme-github.js') }}"></script>
+
+        {% block base_site_js %}{% endblock %}
+
+        {% block other_js %}{% endblock %}
+
+        {% block footer %}{% endblock %}
+
+    </body>
+</html>

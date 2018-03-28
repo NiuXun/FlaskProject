@@ -1,0 +1,119 @@
+{% extends 'home/base_site.html' %}
+
+{% block title %}编辑用户{% endblock %}
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='users/css/users_add.css') }}">
+{% endblock %}
+
+{% block body_main %}
+    <div class="form-group" id="main_body">
+        <div class="page-header" id="add_user_title">
+            <div class="container" id="add_user_title_container">
+                <h3>编辑用户</h3>
+            </div>
+        </div>
+        <form class="form-horizontal" id="form_body" method="post">
+            {{ form.csrf_token }}
+            {% for msg in get_flashed_messages(category_filter=['ok']) %}
+                <div class="alert alert-success alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作成功</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=['error']) %}
+                <div class="alert alert-danger alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作失败</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            <div class="form-group" id="fields">
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.username.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.username(value=user.username) }}</div>
+                <label for="inputPassword" class="col-md-1 control-label">{{ form.password.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.password(value=user.password) }}</div>
+                <label for="inputName" class="col-md-1 control-label">{{ form.name.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.name(value=user.name) }}</div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.username.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+                {% for err in form.password.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+                {% for err in form.name.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputPhone" class="col-md-1 control-label">{{ form.phone.label }}</label>
+                <div class="col-md-3" id="rows">
+                    {{ form.phone(value=user.phone) }}
+                </div>
+                <label for="inputEmail" class="col-md-1 control-label">{{ form.email.label }}</label>
+                <div class="col-md-3" id="rows">
+                    {{ form.email(value=user.email) }}
+                </div>
+                <label for="inputCompanyName" class="col-md-1 control-label">{{ form.company_name.label }}</label>
+                <div class="col-md-3" id="rows">
+                    {{ form.company_name(value=user.company_name) }}
+                </div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.phone.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+                {% for err in form.email.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+                {% for err in form.company_name.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="active_admin">
+                <label for="inputActive" class="col-md-1 control-label">{{ form.is_active.label }}</label>
+                <div class="col-md-3">
+                    {{ form.is_active(value=user.is_active) }}
+                </div>
+                <label for="inputAdmin" class="col-md-1 control-label">{{ form.is_admin.label }}</label>
+                <div class="col-md-3">
+                    {{ form.is_admin(value=user.is_admin) }}
+                </div>
+            </div>
+            <div class="form-group" id="group_role_list">
+                <label for="inputGroup" class="col-md-1 control-label">{{ form.group.label }}</label>
+                <div class="col-md-5">
+                    {{ form.group(value=user.group) }}
+                </div>
+                <label for="inputRole" class="col-md-1 control-label">{{ form.role.label }}</label>
+                <div class="col-md-5">
+                    {{ form.role(value=user.role) }}
+                </div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.group.errors %}
+                    <div class="col-md-6" id="errors">{{ err }}</div>
+                {% endfor %}
+                {% for err in form.role.errors %}
+                    <div class="col-md-6" id="errors">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputRemark" class="col-md-1 control-label">{{ form.remark.label }}</label>
+                <div class="col-md-11">
+                    {{ form.remark(value=user.remark) }}
+                </div>
+            </div>
+            <div class="form-group" id="submit_cancel">
+                <div class="col-sm-offset-3 col-md-2">
+                    {{ form.submit }}
+                </div>
+                <div class="col-sm-offset-2 col-md-2">
+                    <a href="{{ url_for('users.user_list', page=1) }}" class="btn btn-danger btn-block">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

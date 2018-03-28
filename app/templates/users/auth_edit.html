@@ -1,0 +1,70 @@
+{% extends 'home/base_site.html' %}
+
+{% block title %}编辑权限{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='users/css/auths_add.css') }}">
+{% endblock %}
+
+{% block body_main %}
+    <div class="form-group" id="main_body">
+        <div class="page-header" id="add_group_title">
+            <div class="container" id="add_group_title_container">
+                <h3>编辑权限</h3>
+            </div>
+        </div>
+        <form class="form-horizontal" id="form_body" method="post">
+            {{ form.csrf_token }}
+            {% for msg in get_flashed_messages(category_filter=['ok']) %}
+                <div class="alert alert-success alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作成功</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=['error']) %}
+                <div class="alert alert-danger alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作失败</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            <div class="form-group" id="fields">
+                <label for="inputName" class="col-md-2 control-label">{{ form.name.label }}</label>
+                <div class="col-md-8" id="rows">
+                    {{ form.name(value=auth.name) }}
+                </div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.name.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputAdmin" class="col-md-2 control-label">{{ form.url.label }}</label>
+                <div class="col-md-8" id="rows">
+                    {{ form.url(value=auth.url) }}
+                </div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.url.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputRemark" class="col-md-2 control-label">{{ form.remark.label }}</label>
+                <div class="col-md-8">
+                    {{ form.remark(value=auth.remark) }}
+                </div>
+            </div>
+            <div class="form-group" id="submit_cancel">
+                <div class="col-sm-offset-3 col-md-2">
+                    {{ form.submit }}
+                </div>
+                <div class="col-sm-offset-2 col-md-2">
+                   <a href="{{ url_for('users.auth_list', page=1) }}" class="btn btn-danger btn-block">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

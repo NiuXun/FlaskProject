@@ -1,0 +1,35 @@
+{% extends 'home/base_site.html' %}
+{% import 'users/pagination.html' as pg %}
+
+{% block title %}登录日志{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='users/css/loginlog.css') }}">
+{% endblock %}
+
+{% block body_main %}
+
+    <div class="row">
+        <table class="table table-bordered table-hover">
+            <tr class="active">
+                <th>编号</th>
+                <th>用户名</th>
+                <th>操作类型</th>
+                <th>IP地址</th>
+                <th>添加时间</th>
+            </tr>
+            {% for v in page_data.items %}
+            <tr>
+                <td class="col-md-2">{{ v.id }}</td>
+                <td class="col-md-2">{{ v.users }}</td>
+                <td class="col-md-2">{{ v.operation_type }}</td>
+                <td class="col-md-2">{{ v.ip }}</td>
+                <td class="col-md-2">{{ v.addtime }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="row">
+            {{ pg.page(page_data, 'users.login_log') }}
+        </div>
+    </div>
+{% endblock %}
