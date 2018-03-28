@@ -92,3 +92,50 @@ class LoginLog(db.Model):
     operation_type = db.Column(db.String(length=32))
     ip = db.Column(db.String(length=128))
     addtime = db.Column(db.DateTime, default=datetime.now())
+
+
+class Host(db.Model):
+    __tablename__ = 'host'
+    id = db.Column(db.Integer, primary_key=True)
+    host_name = db.Column(db.String(length=128))
+    host_type = db.Column(db.String(length=128))
+    ip_address = db.Column(db.String(length=256))
+    mac_address = db.Column(db.String(length=256))
+    system_type = db.Column(db.String(length=128))
+    sn_number = db.Column(db.String(length=256))
+    cpu = db.Column(db.String(length=32))
+    memory = db.Column(db.String(length=32))
+    disk = db.Column(db.String(length=32))
+    remark = db.Column(db.String(length=256), nullable=True)
+
+    def __repr__(self):
+        return self.host_name
+
+class HostGroup(db.Model):
+    __tablename__ = 'host_group'
+    id = db.Column(db.Integer, primary_key=True)
+    host_group_name = db.Column(db.String(128))
+    remark = db.Column(db.String(length=256), nullable=True)
+
+    def __repr__(self):
+        return self.host_group_name
+
+class IDCinfo(db.Model):
+    __tablename__ = 'IDC_info'
+    id = db.Column(db.Integer, primary_key=True)
+    idc_name = db.Column(db.String(128))
+    idc_address = db.Column(db.String(256))
+    remark = db.Column(db.String(length=256), nullable=True)
+
+    def __repr__(self):
+        return self.idc_name
+
+class Tag(db.Model):
+
+    __tablename__ = 'tag'
+    id = db.Column(db.Integer, primary_key=True)
+    tag_name = db.Column(db.String(128))
+    remark = db.Column(db.String(length=256), nullable=True)
+
+    def __repr__(self):
+        return self.tag_name
