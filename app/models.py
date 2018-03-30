@@ -36,11 +36,29 @@ class User(db.Model):
     loginlogs = db.relationship('LoginLog', backref=db.backref('users'))
     is_active = db.Column(db.String(length=32))
     is_admin = db.Column(db.String(length=32))
-    addtime = db.Column(db.DateTime, default=datetime.now())
+    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     remark = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return self.username
+
+    @staticmethod
+    def create_super_user(username, password):
+        from werkzeug.security import generate_password_hash
+        if User.query.filter_by(username='admin').count() == 0:
+            user = User(
+                username=username,
+                password=generate_password_hash(password),
+                name='超级管理员',
+                email='',
+                phone='',
+                company_name='',
+                is_active='有效',
+                is_admin='系统管理员',
+                remark='',
+            )
+            db.session.add(user)
+            db.session.commit()
 
     def check_password(self, password):
         from werkzeug.security import check_password_hash
@@ -53,7 +71,7 @@ class Role(db.Model):
     name = db.Column(db.String(length=64))
     is_admin = db.Column(db.String(length=32))
     auths = db.relationship('Auth', secondary=roles_auths, backref=db.backref('roles', lazy='dynamic'))
-    addtime = db.Column(db.DateTime, default=datetime.now())
+    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -65,7 +83,7 @@ class Auth(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(length=64), unique=True)
     url = db.Column(db.String(length=128), unique=True)
-    addtime = db.Column(db.DateTime, default=datetime.now())
+    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -78,7 +96,7 @@ class Group(db.Model):
     name = db.Column(db.String(length=64))
     roles = db.relationship('Role', secondary=groups_roles, backref=db.backref('groups', lazy='dynamic'))
     is_admin = db.Column(db.String(length=32))
-    addtime = db.Column(db.DateTime, default=datetime.now())
+    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -91,7 +109,7 @@ class LoginLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     operation_type = db.Column(db.String(length=32))
     ip = db.Column(db.String(length=128))
-    addtime = db.Column(db.DateTime, default=datetime.now())
+    addtime = db.Column(db.DateTime)
 
 
 class Host(db.Model):
@@ -111,6 +129,7 @@ class Host(db.Model):
     def __repr__(self):
         return self.host_name
 
+
 class HostGroup(db.Model):
     __tablename__ = 'host_group'
     id = db.Column(db.Integer, primary_key=True)
@@ -119,6 +138,7 @@ class HostGroup(db.Model):
 
     def __repr__(self):
         return self.host_group_name
+
 
 class IDCinfo(db.Model):
     __tablename__ = 'IDC_info'
@@ -130,8 +150,8 @@ class IDCinfo(db.Model):
     def __repr__(self):
         return self.idc_name
 
-class Tag(db.Model):
 
+class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(128))

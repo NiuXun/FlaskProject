@@ -43,7 +43,7 @@
             <div class="form-group" id="fields">
                 <label for="inputAdmin" class="col-md-2 control-label">{{ form.is_admin.label }}</label>
                 <div class="col-md-8" id="rows">
-                    {{ form.is_admin(value=group.is_admin) }}
+                    {{ form.is_admin }}
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
             <div class="form-group" id="role_list">
                 <label for="inputRoleList" class="col-md-2 control-label">{{ form.roles.label }}</label>
                 <div class="col-md-8">
-                    {{ form.roles(value=group.roles) }}
+                    {{ form.roles }}
                 </div>
             </div>
             <div class="form-group" id="fields">

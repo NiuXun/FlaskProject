@@ -75,6 +75,11 @@ def user_edit(id=None):
     form.group.choices = [(v.id, v.name) for v in Group.query.all()]
     form.role.choices = [(v.id, v.name) for v in Role.query.all()]
     user = User.query.get_or_404(id)
+    if request.method == 'GET':
+        form.is_active.data = user.is_active
+        form.is_admin.data = user.is_admin
+        form.group.data =[(v.id) for v in user.groups]
+        form.role.data = [(v.id) for v in user.roles]
     if form.validate_on_submit():
         data = form.data
         user_count = User.query.filter_by(name=data['name']).count()
@@ -83,8 +88,6 @@ def user_edit(id=None):
             return redirect(url_for('users.user_edit', id=id))
         else:
             try:
-                user.username = data['username']
-                user.password = generate_password_hash(data['password'])
                 user.name = data['name']
                 user.email = data['email']
                 user.phone = data['phone']
@@ -112,12 +115,15 @@ def user_edit(id=None):
 @login_required
 def user_delete(id=None):
     user = User.query.filter_by(id=id).first_or_404()
+    if user.username == 'admin':
+        flash(message='该用户是超级管理员，无法删除！', category='error')
+        return redirect(url_for('users.user_list', page=1))
     db.session.delete(user)
     db.session.commit()
     user = User.query.filter_by(username=session['user']).first_or_404()
     login_log_add(user_id=user.id, operation_type='删除用户', ip_address=request.remote_addr)
     flash(message='删除用户成功', category='ok')
-    return render_template('users/user_list.html', page=1)
+    return redirect(url_for('users.user_list', page=1))
 
 
 # 用户组列表
@@ -178,6 +184,9 @@ def group_edit(id=None):
     form = GroupForm()
     form.roles.choices = [(v.id, v.name) for v in Group.query.all()]
     group = Group.query.get_or_404(id)
+    if request.method == 'GET':
+        form.is_admin.data = group.is_admin
+        form.roles.data =[(v.id) for v in group.roles]
     if form.validate_on_submit():
         data = form.data
         group_count = Group.query.filter_by(name=data['name']).count()
@@ -275,6 +284,9 @@ def role_edit(id=None):
     form = RoleForm()
     form.auths.choices = [(v.id, v.name) for v in Auth.query.all()]
     role = Role.query.get_or_404(id)
+    if request.method == 'GET':
+        form.is_admin.data = role.is_admin
+        form.auths.data =[(v.id) for v in role.auths]
     if form.validate_on_submit():
         data = form.data
         role_count = Auth.query.filter_by(name=data['name']).count()

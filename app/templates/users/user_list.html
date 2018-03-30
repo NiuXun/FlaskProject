@@ -15,6 +15,20 @@
         {{ pg.page(page_data, 'users.auth_list') }}
     </div>
     <div class="row">
+        {% for msg in get_flashed_messages(category_filter=['ok']) %}
+        <div class="alert alert-success alert-dismissible" id="msg_title">
+            <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+            <h4>操作成功</h4>
+            <p>{{ msg }}</p>
+        </div>
+        {% endfor %}
+        {% for msg in get_flashed_messages(category_filter=['error']) %}
+        <div class="alert alert-danger alert-dismissible" id="msg_title">
+            <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+            <h4>操作失败</h4>
+            <p>{{ msg }}</p>
+        </div>
+        {% endfor %}
         <table class="table table-bordered table-hover">
             <tr class="active">
                 <th>编号</th>

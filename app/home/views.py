@@ -4,6 +4,7 @@ from app.home.forms import LoginFrom, ChangePasswordForm
 from app.models import User, LoginLog
 from app import db
 from functools import wraps
+from datetime import datetime
 
 
 def login_required(f):
@@ -22,6 +23,7 @@ def login_log_add(user_id, operation_type, ip_address):
             user_id=user_id,
             operation_type=operation_type,
             ip=ip_address,
+            addtime=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
         db.session.add(login_log)
         db.session.commit()
