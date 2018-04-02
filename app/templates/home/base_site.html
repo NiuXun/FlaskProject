@@ -40,10 +40,13 @@
                                         <h4 class="username">{{ session['user'] }}</h4>
                                         <div class="btn-group margin-bottom-2x" role="group">
                                             <a href="{{ url_for('home.change_password') }}">
-                                                <button type="button" class="btn btn-default"><i class="fa fa-user"></i>修改密码</button>
+                                                <button type="button" class="btn btn-default"><i class="fa fa-user"></i>修改密码
+                                                </button>
                                             </a>
                                             <a href="{{ url_for('home.logout') }}">
-                                                <button type="button" class="btn btn-default"><i class="fa fa-sign-out"></i>退出</button>
+                                                <button type="button" class="btn btn-default"><i
+                                                        class="fa fa-sign-out"></i>退出
+                                                </button>
                                             </a>
                                         </div>
                                     </div>
@@ -86,14 +89,13 @@
                                 <div id="dropdown-assets" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul class="nav navbar-nav">
-                                            <li><a href="#">主机管理</a>
-                                            </li>
-                                            <li><a href="#">主机组管理</a>
-                                            </li>
-                                            <li><a href="#">机房管理</a>
-                                            </li>
-                                            <li><a href="#">标签管理</a>
-                                            </li>
+                                            <li><a href="#">资产列表</a></li>
+                                            <li><a href="{{ url_for('assets.server_list', page=1) }}">服务器管理</a></li>
+                                            <li><a href="#">主机组管理</a></li>
+                                            <li><a href="#">机房管理</a></li>
+                                            <li><a href="#">标签管理</a></li>
+                                            <li><a href="{{ url_for('assets.device_model_list', page=1) }}">设备型号管理</a></li>
+                                            <li><a href="{{ url_for('assets.vendor_list', page=1) }}">供应商管理</a></li>
                                         </ul>
                                     </div>
                                 </div>

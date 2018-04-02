@@ -1,18 +1,16 @@
 {% extends 'home/base_site.html' %}
 {% import 'users/pagination.html' as pg %}
 
-{% block title %}用户列表{% endblock %}
+{% block title %}设备型号管理{% endblock %}
 
-{% block other_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='users/css/user_list.css') }}">
-{% endblock %}
+{% block other_css %}{% endblock %}
 
 {% block body_main %}
     <div class="row">
-        <a href="{{ url_for('users.user_add') }}">
-            <button class="btn btn-success">新增用户</button>
+        <a href="{{ url_for('assets.device_model_add') }}">
+            <button class="btn btn-success">新增设备型号</button>
         </a>
-        {{ pg.page(page_data, 'users.user_list') }}
+        {{ pg.page(page_data, 'assets.device_model_list') }}
     </div>
     <div class="row">
         {% for msg in get_flashed_messages(category_filter=['ok']) %}
@@ -52,8 +50,8 @@
                 <td class="col-md-1">{{ v.is_admin }}</td>
                 <td class="col-md-2">{{ v.remark }}</td>
                 <td class="col-md-1">
-                    <a href="{{ url_for('users.user_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
-                    <a href="{{ url_for('users.user_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
+                    <a href="{{ url_for('assets.device_model_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
+                    <a href="{{ url_for('assets.device_model_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
                 </td>
             </tr>
             {% endfor %}
