@@ -223,7 +223,7 @@ def group_delete(id=None):
     user = User.query.filter_by(username=session['user']).first_or_404()
     login_log_add(user_id=user.id, operation_type='删除用户组', ip_address=request.remote_addr)
     flash(message='删除用户组成功', category='ok')
-    return render_template('users/group_list.html', page=1)
+    return redirect(url_for('users.group_list', page=1))
 
 
 # 角色列表
@@ -323,7 +323,7 @@ def role_delete(id=None):
     user = User.query.filter_by(username=session['user']).first_or_404()
     login_log_add(user_id=user.id, operation_type='删除角色', ip_address=request.remote_addr)
     flash(message='删除角色成功', category='ok')
-    return render_template('users/role_list.html', page=1)
+    return redirect(url_for('users.role_list', page=1))
 
 
 # 权限列表

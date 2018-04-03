@@ -1,10 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home/base_site.html' %}
+{% import 'users/pagination.html' as pg %}
 
-</body>
-</html>
+{% block title %}资产列表{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/assets_list.css') }}">
+{% endblock %}
+
+{% block body_main %}
+    <div class="row">
+        <a href="{{ url_for('assets.server_add') }}">
+            <button class="btn btn-success">新增资产</button>
+        </a>
+        {{ pg.page(page_data, 'assets.server_list') }}
+    </div>
+    <div class="row">
+        {% for msg in get_flashed_messages(category_filter=['ok']) %}
+        <div class="alert alert-success alert-dismissible" id="msg_title">
+            <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+            <h4>操作成功</h4>
+            <p>{{ msg }}</p>
+        </div>
+        {% endfor %}
+        {% for msg in get_flashed_messages(category_filter=['error']) %}
+        <div class="alert alert-danger alert-dismissible" id="msg_title">
+            <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+            <h4>操作失败</h4>
+            <p>{{ msg }}</p>
+        </div>
+        {% endfor %}
+        <table class="table table-bordered table-hover">
+            <tr class="active">
+                <th>资产编号</th>
+                <th>资产名称</th>
+                <th>资产位置</th>
+                <th>资产用途</th>
+                <th>资产性质</th>
+                <th>资产标签</th>
+                <th>所属机房</th>
+                <th>服务器名</th>
+                <th>创建时间</th>
+                <th>最后修改时间</th>
+                <th>操作</th>
+            </tr>
+            {% for v in page_data.items %}
+            <tr>
+                <td class="col-md-1">{{ v.assets_number }}</td>
+                <td class="col-md-1">{{ v.name }}</td>
+                <td class="col-md-1">{{ v.location }}</td>
+                <td class="col-md-1">{{ v.use }}</td>
+                <td class="col-md-1">{{ v.nature }}</td>
+                <td class="col-md-1">{{ v.tags }}</td>
+                <td class="col-md-1">{{ v.idcs_id }}</td>
+                <td class="col-md-1">{{ v.servers }}</td>
+                <td class="col-md-1">{{ v.create_time }}</td>
+                <td class="col-md-1">{{ v.last_modify_time }}</td>
+                <td class="col-md-2">
+                    <a href="{{ url_for('assets.host_group_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
+                    <a href="{{ url_for('assets.host_group_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

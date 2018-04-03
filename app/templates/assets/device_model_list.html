@@ -3,7 +3,9 @@
 
 {% block title %}设备型号管理{% endblock %}
 
-{% block other_css %}{% endblock %}
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/device_model_list.css') }}">
+{% endblock %}
 
 {% block body_main %}
     <div class="row">
@@ -30,26 +32,20 @@
         <table class="table table-bordered table-hover">
             <tr class="active">
                 <th>编号</th>
-                <th>用户名</th>
-                <th>姓名</th>
-                <th>所属用户组</th>
-                <th>所属角色</th>
-                <th>用户状态</th>
-                <th>用户类型</th>
+                <th>设备型号</th>
+                <th>设备类型</th>
+                <th>供应商名称</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
             {% for v in page_data.items %}
             <tr>
                 <td class="col-md-1">{{ v.id }}</td>
-                <td class="col-md-1">{{ v.username }}</td>
-                <td class="col-md-1">{{ v.name }}</td>
-                <td class="col-md-1">{{ v.groups[0] }}</td>
-                <td class="col-md-1">{{ v.roles[0] }}</td>
-                <td class="col-md-1">{{ v.is_active }}</td>
-                <td class="col-md-1">{{ v.is_admin }}</td>
-                <td class="col-md-2">{{ v.remark }}</td>
-                <td class="col-md-1">
+                <td class="col-md-3">{{ v.name }}</td>
+                <td class="col-md-2">{{ v.device_type }}</td>
+                <td class="col-md-2">{{ v.vendors }}</td>
+                <td class="col-md-3">{{ v.remark }}</td>
+                <td class="col-md-2">
                     <a href="{{ url_for('assets.device_model_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
                     <a href="{{ url_for('assets.device_model_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
                 </td>

@@ -89,11 +89,11 @@
                                 <div id="dropdown-assets" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul class="nav navbar-nav">
-                                            <li><a href="#">资产列表</a></li>
+                                            <li><a href="{{ url_for('assets.assets_list', page=1) }}">资产列表</a></li>
                                             <li><a href="{{ url_for('assets.server_list', page=1) }}">服务器管理</a></li>
-                                            <li><a href="#">主机组管理</a></li>
-                                            <li><a href="#">机房管理</a></li>
-                                            <li><a href="#">标签管理</a></li>
+                                            <li><a href="{{ url_for('assets.host_group_list', page=1) }}">主机组管理</a></li>
+                                            <li><a href="{{ url_for('assets.idc_list', page=1) }}">机房管理</a></li>
+                                            <li><a href="{{ url_for('assets.tag_list', page=1) }}">标签管理</a></li>
                                             <li><a href="{{ url_for('assets.device_model_list', page=1) }}">设备型号管理</a></li>
                                             <li><a href="{{ url_for('assets.vendor_list', page=1) }}">供应商管理</a></li>
                                         </ul>
@@ -111,16 +111,11 @@
                                 <div id="dropdown-users" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul class="nav navbar-nav">
-                                            <li><a href="{{ url_for('users.user_list', page=1) }}">用户列表</a>
-                                            </li>
-                                            <li><a href="{{ url_for('users.group_list', page=1) }}">用户组列表</a>
-                                            </li>
-                                            <li><a href="{{ url_for('users.role_list', page=1) }}">角色管理</a>
-                                            </li>
-                                            <li><a href="{{ url_for('users.auth_list', page=1) }}">权限管理</a>
-                                            </li>
-                                            <li><a href="{{ url_for('users.login_log', page=1) }}">操作日志</a>
-                                            </li>
+                                            <li><a href="{{ url_for('users.user_list', page=1) }}">用户列表</a></li>
+                                            <li><a href="{{ url_for('users.group_list', page=1) }}">用户组列表</a></li>
+                                            <li><a href="{{ url_for('users.role_list', page=1) }}">角色管理</a></li>
+                                            <li><a href="{{ url_for('users.auth_list', page=1) }}">权限管理</a></li>
+                                            <li><a href="{{ url_for('users.login_log', page=1) }}">操作日志</a></li>
                                         </ul>
                                     </div>
                                 </div>

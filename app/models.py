@@ -35,8 +35,8 @@ hostgroups_servers = db.Table('hostgroups_servers',
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(length=64), unique=True)
-    password = db.Column(db.String(length=256), unique=True)
+    username = db.Column(db.String(length=64), unique=True, nullable=False)
+    password = db.Column(db.String(length=256), unique=True, nullable=False)
     name = db.Column(db.String(length=128))
     email = db.Column(db.String(length=128), unique=True)
     phone = db.Column(db.String(length=11), unique=True)
@@ -78,7 +78,7 @@ class User(db.Model):
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(length=64))
+    name = db.Column(db.String(length=64), nullable=False)
     is_admin = db.Column(db.String(length=32))
     auths = db.relationship('Auth', secondary=roles_auths, backref=db.backref('roles', lazy='dynamic'))
     addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -91,8 +91,8 @@ class Role(db.Model):
 class Auth(db.Model):
     __tablename__ = 'auth'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(length=64), unique=True)
-    url = db.Column(db.String(length=128), unique=True)
+    name = db.Column(db.String(length=64), unique=True, nullable=False)
+    url = db.Column(db.String(length=128), unique=True, nullable=False)
     addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     description = db.Column(db.String(length=255), nullable=True)
 
@@ -103,7 +103,7 @@ class Auth(db.Model):
 class Group(db.Model):
     __tablename__ = 'group'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(length=64))
+    name = db.Column(db.String(length=64), nullable=False)
     roles = db.relationship('Role', secondary=groups_roles, backref=db.backref('groups', lazy='dynamic'))
     is_admin = db.Column(db.String(length=32))
     addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -128,10 +128,10 @@ class LoginLog(db.Model):
 class Server(db.Model):
     __tablename__ = 'server'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sn_number = db.Column(db.String(length=256))
+    sn_number = db.Column(db.String(length=256), nullable=False)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
     device_model_id = db.Column(db.Integer, db.ForeignKey('device_model.id'))
-    name = db.Column(db.String(length=64))
+    name = db.Column(db.String(length=64), nullable=False)
     cpu_name = db.Column(db.String(length=32))
     cpu_count = db.Column(db.SmallInteger)
     memory = db.Column(db.String(length=32))
@@ -155,7 +155,7 @@ class Server(db.Model):
 class HostGroup(db.Model):
     __tablename__ = 'host_group'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128))
+    name = db.Column(db.String(length=128), nullable=False)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
@@ -165,8 +165,8 @@ class HostGroup(db.Model):
 class IDC(db.Model):
     __tablename__ = 'IDC'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128))
-    address = db.Column(db.String(256))
+    name = db.Column(db.String(length=128), nullable=False)
+    address = db.Column(db.String(length=256))
     assets_id = db.Column(db.Integer, db.ForeignKey('assets.id'))
     remark = db.Column(db.String(length=256), nullable=True)
 
@@ -177,7 +177,7 @@ class IDC(db.Model):
 class Assets(db.Model):
     __tablename__ = 'assets'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(length=64))
+    name = db.Column(db.String(length=64), nullable=False)
     assets_number = db.Column(db.Integer)
     location = db.Column(db.String(length=64))
     use = db.Column(db.String(length=64))
@@ -197,7 +197,7 @@ class Assets(db.Model):
 class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128))
+    name = db.Column(db.String(length=128), nullable=False)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
@@ -207,8 +207,8 @@ class Tag(db.Model):
 class Vendor(db.Model):
     __tablename__ = 'vendor'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128))
-    address = db.Column(db.String(256))
+    name = db.Column(db.String(length=128), nullable=False)
+    address = db.Column(db.String(length=256), nullable=True)
     servers = db.relationship('Server', backref=db.backref('vendors'))
     models = db.relationship('DeviceModel', backref=db.backref('vendors'))
     remark = db.Column(db.String(length=256), nullable=True)
@@ -216,10 +216,12 @@ class Vendor(db.Model):
     def __repr__(self):
         return self.name
 
+
 class DeviceModel(db.Model):
     __tablename__ = 'device_model'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(128))
+    name = db.Column(db.String(length=128), nullable=False)
+    device_type = db.Column(db.String(length=64))
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
     servers = db.relationship('Server', backref=db.backref('models'))
     remark = db.Column(db.String(length=256), nullable=True)

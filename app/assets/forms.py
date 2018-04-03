@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, SelectField, TextAreaField, SelectMultipleField
-from wtforms.validators import DataRequired, IPAddress, MacAddress, NumberRange,Regexp
+from wtforms.validators import DataRequired, IPAddress, MacAddress, NumberRange, Regexp
 
 
 class ServerForm(FlaskForm):
@@ -8,7 +8,7 @@ class ServerForm(FlaskForm):
         label='S/N编号',
         validators=[
             DataRequired(message='请输入S/N编号 ！'),
-            Regexp(r'^[A-Za-z][A-Za-z0-9]', message='非法字符')
+            Regexp(r'^[A-Za-z0-9][A-Za-z0-9]', message='非法字符')
         ],
         description='S/N编号',
         render_kw={
@@ -23,6 +23,7 @@ class ServerForm(FlaskForm):
             DataRequired(message='请输入设备厂商 ！'),
         ],
         description='设备厂商',
+        coerce=int,
         choices=[],
         render_kw={
             'class': 'form-control',
@@ -34,6 +35,7 @@ class ServerForm(FlaskForm):
             DataRequired(message='请输入设备型号 ！'),
         ],
         description='设备型号',
+        coerce=int,
         choices=[],
         render_kw={
             'class': 'form-control',
@@ -64,15 +66,15 @@ class ServerForm(FlaskForm):
         }
     )
     cpu_count = IntegerField(
-        label='CPU个数',
+        label='CPU数量(个)',
         validators=[
-            DataRequired(message='请输入CPU个数 ！'),
-            NumberRange(min=1,max=32,message='请输入正确的CPU个数'),
+            DataRequired(message='请输入CPU数量 ！'),
+            NumberRange(min=1, max=32, message='请输入正确的CPU数量'),
         ],
-        description='CPU个数',
+        description='CPU数量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入CPU个数',
+            'placeholder': '请输入CPU数量',
             # 'required': 'required',
         }
     )
@@ -89,15 +91,15 @@ class ServerForm(FlaskForm):
         }
     )
     memory_count = IntegerField(
-        label='内存条个数',
+        label='内存数量(个)',
         validators=[
-            DataRequired(message='请输入内存条个数 ！'),
-            NumberRange(min=1, max=64, message='请输入正确的内存条个数'),
+            DataRequired(message='请输入内存数量 ！'),
+            NumberRange(min=1, max=64, message='请输入正确的内存数量'),
         ],
-        description='内存条个数',
+        description='内存数量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入内存条个数',
+            'placeholder': '请输入内存数量',
             # 'required': 'required',
         }
     )
@@ -114,15 +116,15 @@ class ServerForm(FlaskForm):
         }
     )
     disk_count = IntegerField(
-        label='硬盘个数',
+        label='硬盘数量(块)',
         validators=[
-            DataRequired(message='请输入硬盘个数 ！'),
-            NumberRange(min=1, max=64, message='请输入正确的硬盘个数'),
+            DataRequired(message='请输入硬盘数量 ！'),
+            NumberRange(min=1, max=64, message='请输入正确的硬盘数量'),
         ],
-        description='硬盘个数',
+        description='硬盘数量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入硬盘个数',
+            'placeholder': '请输入硬盘数量',
             # 'required': 'required',
         }
     )
@@ -132,7 +134,7 @@ class ServerForm(FlaskForm):
             DataRequired(message='请选择RAID类型'),
         ],
         coerce=str,
-        choices=[('RAID-0','RAID-0'),('RAID-1','RAID-1'),('RAID-5','RAID-5')],
+        choices=[('RAID-0', 'RAID-0'), ('RAID-1', 'RAID-1'), ('RAID-5', 'RAID-5')],
         description='RAID类型',
         render_kw={
             'class': 'form-control col-md-5',
@@ -144,34 +146,34 @@ class ServerForm(FlaskForm):
             DataRequired(message='请输入设备型号 ！'),
         ],
         description='设备型号',
-        choices=[('万兆','万兆'),('千兆','千兆'),('百兆','百兆'),],
+        choices=[('万兆', '万兆'), ('千兆', '千兆'), ('百兆', '百兆'), ],
         render_kw={
             'class': 'form-control',
         }
     )
     network_card_count = IntegerField(
-        label='网卡个数',
+        label='网卡数量(个)',
         validators=[
-            DataRequired(message='请输入网卡个数 ！'),
-            NumberRange(min=1, max=64, message='请输入正确的网卡个数'),
+            DataRequired(message='请输入网卡数量 ！'),
+            NumberRange(min=1, max=64, message='请输入正确的网卡数量'),
         ],
-        description='网卡个数',
+        description='网卡数量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入网卡个数',
+            'placeholder': '请输入网卡数量',
             # 'required': 'required',
         }
     )
     power_count = IntegerField(
-        label='电源个数',
+        label='电源数量(个)',
         validators=[
-            DataRequired(message='请输入电源个数 ！'),
-            NumberRange(min=1, max=32, message='请输入正确的电源个数'),
+            DataRequired(message='请输入电源数量 ！'),
+            NumberRange(min=1, max=32, message='请输入正确的电源数量'),
         ],
-        description='电源个数',
+        description='电源数量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入电源个数',
+            'placeholder': '请输入电源数量',
             # 'required': 'required',
         }
     )
@@ -216,7 +218,7 @@ class ServerForm(FlaskForm):
     groups = SelectMultipleField(
         label='所属主机组',
         validators=[
-            DataRequired(message='请选择所属主机组'),
+            # DataRequired(message='请选择所属主机组'),
         ],
         coerce=int,
         choices=[],
@@ -283,28 +285,72 @@ class VendorForm(FlaskForm):
         }
     )
 
+
 class DeviceModelForm(FlaskForm):
     name = StringField(
-        label='厂商名称',
+        label='设备型号',
         validators=[
-            DataRequired(message='请输入厂商名称 ！'),
+            DataRequired(message='请输入设备型号 ！'),
         ],
-        description='厂商名称',
+        description='设备型号',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入厂商名称',
+            'placeholder': '请输入设备型号',
             # 'required': 'required',
         }
     )
     vendor = SelectField(
-        label='供应商名称',
+        label='供应商',
         validators=[
-            DataRequired(message='请输入供应商名称 ！'),
+            DataRequired(message='请输入供应商 ！'),
         ],
-        description='供应商名称',
+        description='供应商',
+        coerce=int,
         choices=[],
         render_kw={
             'class': 'form-control',
+        }
+    )
+    device_type = SelectField(
+        label='设备类型',
+        validators=[
+            DataRequired(message='请输入设备类型 ！'),
+        ],
+        description='设备类型',
+        coerce=str,
+        choices=[('机架式服务器', '机架式服务器'), ('刀片式服务器', '刀片式服务器'), ('塔式服务器', '塔式服务器')],
+        render_kw={
+            'class': 'form-control',
+        }
+    )
+    remark = TextAreaField(
+        label='备注',
+        description='备注',
+        render_kw={
+            'class': 'form-control',
+            'id': 'inputRemark',
+            'rows': 5,
+        }
+    )
+    submit = SubmitField(
+        '提交',
+        render_kw={
+            'class': 'btn btn-success btn-block',
+        }
+    )
+
+
+class HostGroupForm(FlaskForm):
+    name = StringField(
+        label='主机组名称',
+        validators=[
+            DataRequired(message='请输入主机组名称 ！'),
+        ],
+        description='主机组名称',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入主机组名称',
+            # 'required': 'required',
         }
     )
     remark = TextAreaField(
