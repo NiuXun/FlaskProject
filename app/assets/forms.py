@@ -257,68 +257,14 @@ class VendorForm(FlaskForm):
             # 'required': 'required',
         }
     )
-    address = StringField(
-        label='供应商地址',
-        validators=[
-            DataRequired(message='请输入供应商地址 ！'),
-        ],
-        description='供应商地址',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入供应商地址',
-            # 'required': 'required',
-        }
-    )
-    remark = TextAreaField(
-        label='备注',
-        description='备注',
-        render_kw={
-            'class': 'form-control',
-            'id': 'inputRemark',
-            'rows': 5,
-        }
-    )
-    submit = SubmitField(
-        '提交',
-        render_kw={
-            'class': 'btn btn-success btn-block',
-        }
-    )
-
-
-class DeviceModelForm(FlaskForm):
-    name = StringField(
-        label='设备型号',
-        validators=[
-            DataRequired(message='请输入设备型号 ！'),
-        ],
-        description='设备型号',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入设备型号',
-            # 'required': 'required',
-        }
-    )
-    vendor = SelectField(
-        label='供应商',
-        validators=[
-            DataRequired(message='请输入供应商 ！'),
-        ],
-        description='供应商',
-        coerce=int,
-        choices=[],
-        render_kw={
-            'class': 'form-control',
-        }
-    )
     device_type = SelectField(
-        label='设备类型',
+        label='类型',
         validators=[
-            DataRequired(message='请输入设备类型 ！'),
+            DataRequired(message='请输入类型 ！'),
         ],
-        description='设备类型',
+        description='类型',
         coerce=str,
-        choices=[('机架式服务器', '机架式服务器'), ('刀片式服务器', '刀片式服务器'), ('塔式服务器', '塔式服务器')],
+        choices=[('CPU','CPU'),('内存','内存'),('硬盘','硬盘'),('服务器','服务器'),('交换机','交换机'),('存储','存储')],
         render_kw={
             'class': 'form-control',
         }

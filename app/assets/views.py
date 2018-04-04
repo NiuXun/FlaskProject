@@ -1,8 +1,8 @@
 from . import assets
 from flask import render_template, redirect, url_for, flash, request
-from app.models import Server, HostGroup, Assets, Tag, IDC, Vendor, DeviceModel
+from app.models import Server, HostGroup, Assets, Tag, IDC, Vendor
 from app.home.views import login_required
-from app.assets.forms import ServerForm, VendorForm, DeviceModelForm, HostGroupForm
+from app.assets.forms import ServerForm, VendorForm, HostGroupForm
 from app import db
 
 
@@ -23,7 +23,6 @@ def server_add():
     form = ServerForm()
     form.groups.choices = [(v.id, v.name) for v in HostGroup.query.all()]
     form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
-    form.device_model.choices = [(v.id, v.name) for v in DeviceModel.query.all()]
     if form.validate_on_submit():
         data = form.data
         server_count = Server.query.filter_by(name=data['name']).count()
@@ -73,7 +72,6 @@ def server_edit(id=None):
     form = ServerForm()
     form.groups.choices = [(v.id, v.name) for v in HostGroup.query.all()]
     form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
-    form.device_model.choices = [(v.id, v.name) for v in DeviceModel.query.all()]
     server = Server.query.get_or_404(id)
     if request.method == 'GET':
         form.vendor.data = server.vendor_id
@@ -282,7 +280,7 @@ def tag_delete(id=None):
     return redirect(url_for('assets.tag_list', page=1))
 
 
-# 供应商列表
+# 厂商列表
 @assets.route('/vendor_list/<int:page>/', methods=['GET'])
 def vendor_list(page=None):
     if page is None:
@@ -291,140 +289,66 @@ def vendor_list(page=None):
     return render_template('assets/vendor_list.html', page_data=page_data)
 
 
-# 新增供应商
+# 新增厂商
 @assets.route('/vendor_add/', methods=['GET', 'POST'])
 def vendor_add():
     form = VendorForm()
     if form.validate_on_submit():
         data = form.data
-        vendor_count = Vendor.query.filter_by(name=data['name']).count()
-        if vendor_count == 1:
-            flash(message='该供应商已存在', category='error')
+        vendor = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).first()
+        vendor_count = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).count()
+        if vendor_count == 1 and vendor.device_type == data['device_type']:
+            flash(message='该厂商已存在', category='error')
             return redirect(url_for('assets.vendor_add'))
         try:
             vendor = Vendor(
                 name=data['name'],
-                address=data['address'],
+                device_type=data['device_type'],
                 remark=data['remark'],
             )
             db.session.add(vendor)
             db.session.commit()
-            flash(message='添加供应商成功', category='ok')
+            flash(message='添加厂商成功', category='ok')
             return redirect(url_for('assets.vendor_add'))
         except Exception as e:
             print(e)
     return render_template('assets/vendor_add.html', form=form)
 
 
-# 编辑供应商
+# 编辑厂商
 @assets.route('/vendor_edit/<int:id>/', methods=['GET', 'POST'])
 def vendor_edit(id=None):
     form = VendorForm()
     vendor = Vendor.query.get_or_404(id)
+    if request.method == 'GET':
+        form.device_type.data = vendor.device_type
     if form.validate_on_submit():
         data = form.data
-        vendor_count = Vendor.query.filter_by(name=data['name']).count()
-        if vendor.name != data['name'] and vendor_count == 1:
-            flash(message='该供应商已存在，请重新输入', category='error')
+        vendor_count = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).count()
+        if (vendor.name != data['name'] and vendor_count == 1) or (vendor.device_type != data['device_type'] and vendor_count == 1):
+            flash(message='该厂商已存在，请重新输入', category='error')
             return redirect(url_for('assets.vendor_edit', id=id))
         try:
             vendor.name = data['name']
-            vendor.address = data['address']
+            vendor.device_type = data['device_type']
             vendor.remark = data['remark']
             db.session.add(vendor)
             db.session.commit()
-            flash(message='修改供应商成功', category='ok')
+            flash(message='修改厂商成功', category='ok')
             return redirect(url_for('assets.vendor_edit', id=id))
         except Exception as e:
             print(e)
     return render_template('assets/vendor_edit.html', form=form, vendor=vendor)
 
 
-# 删除供应商
+# 删除厂商
 @assets.route('/vendor_delete/<int:id>/', methods=['GET'])
 def vendor_delete(id=None):
     vendor = Vendor.query.filter_by(id=id).first_or_404()
     try:
         db.session.delete(vendor)
         db.session.commit()
-        flash(message='删除供应商成功', category='ok')
+        flash(message='删除厂商成功', category='ok')
         return redirect(url_for('assets.vendor_list', page=1))
-    except Exception as e:
-        print(e)
-
-
-# 设备型号列表
-@assets.route('/device_model_list/<int:page>/', methods=['GET'])
-def device_model_list(page=None):
-    if page is None:
-        page = 1
-    page_data = DeviceModel.query.order_by(DeviceModel.id.desc()).paginate(page=page, per_page=10)
-    return render_template('assets/device_model_list.html', page_data=page_data)
-
-
-# 新增设备型号
-@assets.route('/device_model_add/', methods=['GET', 'POST'])
-def device_model_add():
-    form = DeviceModelForm()
-    form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
-    if form.validate_on_submit():
-        data = form.data
-        device_model_count = DeviceModel.query.filter_by(name=data['name']).count()
-        if device_model_count == 1:
-            flash(message='该设备型号已存在', category='error')
-            return redirect(url_for('assets.device_model_add'))
-        else:
-            device_model = DeviceModel(
-                name=data['name'],
-                device_type=data['device_type'],
-                vendor_id=int(data['vendor']),
-                remark=data['remark'],
-            )
-            db.session.add(device_model)
-            db.session.commit()
-            flash(message='添加设备型号成功', category='ok')
-            return redirect(url_for('assets.device_model_add'))
-    else:
-        print(form.errors)
-    return render_template('assets/device_model_add.html', form=form)
-
-
-# 编辑设备型号
-@assets.route('/device_model_edit/<int:id>/', methods=['GET', 'POST'])
-def device_model_edit(id=None):
-    form = DeviceModelForm()
-    form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
-    device_model = DeviceModel.query.get_or_404(id)
-    if request.method == 'GET':
-        form.vendor.data = device_model.vendor_id
-        form.device_type.data = device_model.device_type
-    if form.validate_on_submit():
-        data = form.data
-        device_model_count = DeviceModel.query.filter_by(name=data['name']).count()
-        if device_model.name != data['name'] and device_model_count == 1:
-            flash(message='该设备型号已存在，请重新输入', category='error')
-            return redirect(url_for('assets.device_model_edit', id=id))
-        try:
-            device_model.name = data['name']
-            device_model.device_type = data['device_type']
-            device_model.remark = data['remark']
-            db.session.add(device_model)
-            db.session.commit()
-            flash(message='修改设备型号成功', category='ok')
-            return redirect(url_for('assets.device_model_edit', id=id))
-        except Exception as e:
-            print(e)
-    return render_template('assets/device_model_edit.html', form=form, device_model=device_model)
-
-
-# 删除设备型号
-@assets.route('/device_model_delete/<int:id>/', methods=['GET'])
-def device_model_delete(id=None):
-    device_model = DeviceModel.query.filter_by(id=id).first_or_404()
-    try:
-        db.session.delete(device_model)
-        db.session.commit()
-        flash(message='删除设备型号成功', category='ok')
-        return redirect(url_for('assets.device_model_list', page=1))
     except Exception as e:
         print(e)
