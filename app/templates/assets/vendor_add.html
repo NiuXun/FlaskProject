@@ -31,20 +31,27 @@
             {% endfor %}
             <div class="form-group" id="fields">
                 <label for="inputUsername" class="col-md-1 control-label">{{ form.name.label }}</label>
-                <div class="col-md-5" id="rows">{{ form.name }}</div>
+                <div class="col-md-3" id="rows">{{ form.name }}</div>
                 <label for="inputUsername" class="col-md-1 control-label">{{ form.device_type.label }}</label>
-                <div class="col-md-5" id="rows">{{ form.device_type }}</div>
+                <div class="col-md-3" id="rows">{{ form.device_type }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_model.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.device_model }}</div>
             </div>
             <div class="form-group" id="fields_error">
                 {% for err in form.name.errors %}
-                    <div class="col-md-6">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-6"></div>
+                    <div class="col-md-4"></div>
                 {% endfor %}
                 {% for err in form.device_type.errors %}
-                    <div class="col-md-6">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-6"></div>
+                    <div class="col-md-4"></div>
+                {% endfor %}
+                {% for err in form.device_model.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
                 {% endfor %}
             </div>
             <div class="form-group" id="fields">

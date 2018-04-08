@@ -1,6 +1,6 @@
 {% extends 'home/base_site.html' %}
 
-{% block title %}编辑供应商{% endblock %}
+{% block title %}编辑厂商{% endblock %}
 
 {% block other_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/vendor_add.css') }}">
@@ -10,7 +10,7 @@
     <div class="form-group" id="main_body">
         <div class="page-header" id="add_user_title">
             <div class="container" id="add_user_title_container">
-                <h3>编辑供应商</h3>
+                <h3>编辑厂商</h3>
             </div>
         </div>
         <form class="form-horizontal" id="form_body" method="post">
@@ -31,7 +31,11 @@
             {% endfor %}
             <div class="form-group" id="fields">
                 <label for="inputUsername" class="col-md-1 control-label">{{ form.name.label }}</label>
-                <div class="col-md-11" id="rows">{{ form.name(value=vendor.name) }}</div>
+                <div class="col-md-3" id="rows">{{ form.name(value=vendor.name) }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_type.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.device_type }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_model.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.device_model(value=vendor.device_model) }}</div>
             </div>
             <div class="form-group" id="fields_error">
                 {% for err in form.name.errors %}
@@ -39,13 +43,12 @@
                 {% else %}
                     <div class="col-md-3"></div>
                 {% endfor %}
-            </div>
-            <div class="form-group" id="fields">
-                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_type.label }}</label>
-                <div class="col-md-11" id="rows">{{ form.device_type }}</div>
-            </div>
-            <div class="form-group" id="fields_error">
                 {% for err in form.device_type.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+                {% for err in form.device_model.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>

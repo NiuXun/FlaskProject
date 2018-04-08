@@ -23,7 +23,7 @@ def login_log_add(user_id, operation_type, ip_address):
             user_id=user_id,
             operation_type=operation_type,
             ip=ip_address,
-            addtime=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            create_time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
         db.session.add(login_log)
         db.session.commit()

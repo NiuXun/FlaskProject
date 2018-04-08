@@ -33,11 +33,9 @@
                 <label for="inputUsername" class="col-md-1 control-label">{{ form.sn_number.label }}</label>
                 <div class="col-md-2" id="rows">{{ form.sn_number }}</div>
                 <label for="inputPassword" class="col-md-1 control-label">{{ form.name.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.name }}</div>
+                <div class="col-md-3" id="rows">{{ form.name }}</div>
                 <label for="inputActive" class="col-md-1 control-label">{{ form.vendor.label }}</label>
-                <div class="col-md-2">{{ form.vendor }}</div>
-                <label for="inputAdmin" class="col-md-1 control-label">{{ form.device_model.label }}</label>
-                <div class="col-md-2">{{ form.device_model }}</div>
+                <div class="col-md-4">{{ form.vendor }}</div>
             </div>
             <div class="form-group" id="fields_error">
                 {% for err in form.sn_number.errors %}
@@ -46,33 +44,28 @@
                     <div class="col-md-3"></div>
                 {% endfor %}
                 {% for err in form.name.errors %}
-                    <div class="col-md-3">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                 {% endfor %}
                 {% for err in form.vendor.errors %}
-                    <div class="col-md-3">{{ err }}</div>
+                    <div class="col-md-5">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-3"></div>
-                {% endfor %}
-                {% for err in form.device_model.errors %}
-                    <div class="col-md-3">{{ err }}</div>
-                {% else %}
-                    <div class="col-md-3"></div>
+                    <div class="col-md-5"></div>
                 {% endfor %}
             </div>
             <div class="form-group" id="fields">
-                <label for="inputName" class="col-md-1 control-label">{{ form.cpu_name.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.cpu_name }}</div>
+                <label for="inputName" class="col-md-1 control-label">{{ form.cpu_type.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.cpu_type }}</div>
                 <label for="inputPhone" class="col-md-1 control-label">{{ form.cpu_count.label }}</label>
                 <div class="col-md-2" id="rows">{{ form.cpu_count }}</div>
-                <label for="inputEmail" class="col-md-1 control-label">{{ form.memory.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.memory }}</div>
-                <label for="inputCompanyName" class="col-md-1 control-label">{{ form.memory_count.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.memory_count }}</div>
+                <label for="inputEmail" class="col-md-1 control-label">{{ form.memory_capacity.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.memory_capacity }}</div>
+                <label for="inputCompanyName" class="col-md-1 control-label">{{ form.power_count.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.power_count }}</div>
             </div>
             <div class="form-group" id="fields_error">
-                {% for err in form.cpu_name.errors %}
+                {% for err in form.cpu_type.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>
@@ -82,34 +75,29 @@
                 {% else %}
                     <div class="col-md-3"></div>
                 {% endfor %}
-                {% for err in form.memory.errors %}
+                {% for err in form.memory_capacity.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>
                 {% endfor %}
-                {% for err in form.memory_count.errors %}
+                {% for err in form.power_count.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>
                 {% endfor %}
             </div>
             <div class="form-group" id="fields">
-                <label for="inputEmail" class="col-md-1 control-label">{{ form.disk.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.disk }}</div>
-                <label for="inputCompanyName" class="col-md-1 control-label">{{ form.disk_count.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.disk_count }}</div>
-                <label for="inputEmail" class="col-md-1 control-label">{{ form.network_card_count.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.network_card_count }}</div>
                 <label for="inputAdmin" class="col-md-1 control-label">{{ form.network_card_type.label }}</label>
                 <div class="col-md-2">{{ form.network_card_type }}</div>
+                <label for="inputEmail" class="col-md-1 control-label">{{ form.network_card_count.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.network_card_count }}</div>
+                <label for="inputEmail" class="col-md-1 control-label">{{ form.disk_type.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.disk_type }}</div>
+                <label for="inputEmail" class="col-md-1 control-label">{{ form.disk_capacity.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.disk_capacity }}</div>
             </div>
             <div class="form-group" id="fields_error">
-                {% for err in form.disk.errors %}
-                    <div class="col-md-3">{{ err }}</div>
-                {% else %}
-                    <div class="col-md-3"></div>
-                {% endfor %}
-                {% for err in form.disk_count.errors %}
+                {% for err in form.network_card_type.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>
@@ -119,7 +107,12 @@
                 {% else %}
                     <div class="col-md-3"></div>
                 {% endfor %}
-                {% for err in form.network_card_type.errors %}
+                {% for err in form.disk_type.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+                {% for err in form.disk_capacity.errors %}
                     <div class="col-md-3">{{ err }}</div>
                 {% else %}
                     <div class="col-md-3"></div>
@@ -127,34 +120,27 @@
             </div>
             <div class="form-group" id="active_admin">
                 <label for="inputEmail" class="col-md-1 control-label">{{ form.ip_address.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.ip_address }}</div>
+                <div class="col-md-3" id="rows">{{ form.ip_address }}</div>
                 <label for="inputCompanyName" class="col-md-1 control-label">{{ form.mac_address.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.mac_address }}</div>
+                <div class="col-md-3" id="rows">{{ form.mac_address }}</div>
                 <label for="inputCompanyName" class="col-md-1 control-label">{{ form.system_version.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.system_version }}</div>
-                <label for="inputCompanyName" class="col-md-1 control-label">{{ form.power_count.label }}</label>
-                <div class="col-md-2" id="rows">{{ form.power_count }}</div>
+                <div class="col-md-3" id="rows">{{ form.system_version }}</div>
             </div>
             <div class="form-group" id="fields_error">
                 {% for err in form.ip_address.errors %}
-                    <div class="col-md-3">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                 {% endfor %}
                 {% for err in form.mac_address.errors %}
-                    <div class="col-md-3">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                 {% endfor %}
                 {% for err in form.system_version.errors %}
-                    <div class="col-md-3">{{ err }}</div>
+                    <div class="col-md-4">{{ err }}</div>
                 {% else %}
-                    <div class="col-md-3"></div>
-                {% endfor %}
-                {% for err in form.power_count.errors %}
-                    <div class="col-md-3">{{ err }}</div>
-                {% else %}
-                    <div class="col-md-3"></div>
+                    <div class="col-md-4"></div>
                 {% endfor %}
             </div>
             <div class="form-group" id="group_role_list">

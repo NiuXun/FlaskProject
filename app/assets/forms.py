@@ -17,30 +17,6 @@ class ServerForm(FlaskForm):
             # 'required': 'required',
         }
     )
-    vendor = SelectField(
-        label='设备厂商',
-        validators=[
-            DataRequired(message='请输入设备厂商 ！'),
-        ],
-        description='设备厂商',
-        coerce=int,
-        choices=[],
-        render_kw={
-            'class': 'form-control',
-        }
-    )
-    device_model = SelectField(
-        label='设备型号',
-        validators=[
-            DataRequired(message='请输入设备型号 ！'),
-        ],
-        description='设备型号',
-        coerce=int,
-        choices=[],
-        render_kw={
-            'class': 'form-control',
-        }
-    )
     name = StringField(
         label='设备名称',
         validators=[
@@ -53,7 +29,69 @@ class ServerForm(FlaskForm):
             # 'required': 'required',
         }
     )
-    cpu_name = StringField(
+    vendor = SelectField(
+        label='设备厂商',
+        validators=[
+            DataRequired(message='请输入设备厂商 ！'),
+        ],
+        description='设备厂商',
+        coerce=int,
+        choices=[],
+        render_kw={
+            'class': 'form-control',
+        }
+    )
+    system_version = StringField(
+        label='操作系统版本',
+        validators=[
+            DataRequired(message='请输入操作系统版本 ！'),
+        ],
+        description='操作系统版本',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入操作系统版本',
+            # 'required': 'required',
+        }
+    )
+    ip_address = StringField(
+        label='IP地址',
+        validators=[
+            DataRequired(message='请输入IP地址 ！'),
+            IPAddress(ipv4=True, message='请输入正确的IP地址'),
+        ],
+        description='IP地址',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入IP地址',
+            # 'required': 'required',
+        }
+    )
+    mac_address = StringField(
+        label='MAC地址',
+        validators=[
+            DataRequired(message='请输入MAC地址 ！'),
+            MacAddress(message='请输入正确的MAC地址'),
+        ],
+        description='MAC地址',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入MAC地址',
+            # 'required': 'required',
+        }
+    )
+    RAID_type = SelectMultipleField(
+        label='RAID类型',
+        validators=[
+            DataRequired(message='请选择RAID类型'),
+        ],
+        coerce=str,
+        choices=[('RAID-0', 'RAID-0'), ('RAID-1', 'RAID-1'), ('RAID-5', 'RAID-5')],
+        description='RAID类型',
+        render_kw={
+            'class': 'form-control col-md-5',
+        }
+    )
+    cpu_type = StringField(
         label='CPU型号',
         validators=[
             DataRequired(message='请输入CPU型号 ！'),
@@ -78,74 +116,48 @@ class ServerForm(FlaskForm):
             # 'required': 'required',
         }
     )
-    memory = StringField(
-        label='内存总量',
+    memory_capacity = StringField(
+        label='内存容量',
         validators=[
-            DataRequired(message='请输入内存总量 ！'),
+            DataRequired(message='请输入内存容量 ！'),
         ],
-        description='内存总量',
+        description='内存容量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入内存总量',
+            'placeholder': '请输入内存容量',
             # 'required': 'required',
         }
     )
-    memory_count = IntegerField(
-        label='内存数量(个)',
+    disk_capacity = StringField(
+        label='硬盘容量',
         validators=[
-            DataRequired(message='请输入内存数量 ！'),
-            NumberRange(min=1, max=64, message='请输入正确的内存数量'),
+            DataRequired(message='请输入硬盘容量 ！'),
         ],
-        description='内存数量',
+        description='硬盘容量',
         render_kw={
             'class': 'form-control',
-            'placeholder': '请输入内存数量',
+            'placeholder': '请输入硬盘容量',
             # 'required': 'required',
         }
     )
-    disk = StringField(
-        label='硬盘总量',
+    disk_type = SelectField(
+        label='硬盘类型',
         validators=[
-            DataRequired(message='请输入硬盘总量 ！'),
+            DataRequired(message='请输入硬盘类型 ！'),
         ],
-        description='硬盘总量',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入硬盘总量',
-            # 'required': 'required',
-        }
-    )
-    disk_count = IntegerField(
-        label='硬盘数量(块)',
-        validators=[
-            DataRequired(message='请输入硬盘数量 ！'),
-            NumberRange(min=1, max=64, message='请输入正确的硬盘数量'),
-        ],
-        description='硬盘数量',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入硬盘数量',
-            # 'required': 'required',
-        }
-    )
-    RAID_type = SelectMultipleField(
-        label='RAID类型',
-        validators=[
-            DataRequired(message='请选择RAID类型'),
-        ],
+        description='硬盘类型',
         coerce=str,
-        choices=[('RAID-0', 'RAID-0'), ('RAID-1', 'RAID-1'), ('RAID-5', 'RAID-5')],
-        description='RAID类型',
+        choices=[('SATA','SATA'),('SAS','SAS'),('SSD','SSD')],
         render_kw={
-            'class': 'form-control col-md-5',
+            'class': 'form-control',
         }
     )
     network_card_type = SelectField(
-        label='设备型号',
+        label='网卡类型',
         validators=[
-            DataRequired(message='请输入设备型号 ！'),
+            DataRequired(message='请输入网卡类型 ！'),
         ],
-        description='设备型号',
+        description='网卡类型',
         choices=[('万兆', '万兆'), ('千兆', '千兆'), ('百兆', '百兆'), ],
         render_kw={
             'class': 'form-control',
@@ -177,49 +189,8 @@ class ServerForm(FlaskForm):
             # 'required': 'required',
         }
     )
-    ip_address = StringField(
-        label='IP地址',
-        validators=[
-            DataRequired(message='请输入IP地址 ！'),
-            IPAddress(ipv4=True, message='请输入正确的IP地址'),
-        ],
-        description='IP地址',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入IP地址',
-            # 'required': 'required',
-        }
-    )
-    mac_address = StringField(
-        label='MAC地址',
-        validators=[
-            DataRequired(message='请输入MAC地址 ！'),
-            MacAddress(message='请输入正确的MAC地址'),
-        ],
-        description='MAC地址',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入MAC地址',
-            # 'required': 'required',
-        }
-    )
-    system_version = StringField(
-        label='操作系统版本',
-        validators=[
-            DataRequired(message='请输入操作系统版本 ！'),
-        ],
-        description='操作系统版本',
-        render_kw={
-            'class': 'form-control',
-            'placeholder': '请输入操作系统版本',
-            # 'required': 'required',
-        }
-    )
     groups = SelectMultipleField(
         label='所属主机组',
-        validators=[
-            # DataRequired(message='请选择所属主机组'),
-        ],
         coerce=int,
         choices=[],
         description='所属主机组',
@@ -258,15 +229,26 @@ class VendorForm(FlaskForm):
         }
     )
     device_type = SelectField(
-        label='类型',
+        label='设备类型',
         validators=[
-            DataRequired(message='请输入类型 ！'),
+            DataRequired(message='请输入设备类型 ！'),
         ],
-        description='类型',
+        description='设备类型',
         coerce=str,
-        choices=[('CPU','CPU'),('内存','内存'),('硬盘','硬盘'),('服务器','服务器'),('交换机','交换机'),('存储','存储')],
+        choices=[('服务器','服务器'),('网络设备','网络设备'),('存储设备','存储设备')],
         render_kw={
             'class': 'form-control',
+        }
+    )
+    device_model = StringField(
+        label='设备型号',
+        validators=[
+            DataRequired(message='请输入设备型号 ！'),
+        ],
+        description='设备型号',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入设备型号',
         }
     )
     remark = TextAreaField(

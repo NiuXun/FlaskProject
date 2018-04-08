@@ -33,16 +33,18 @@
             <tr class="active">
                 <th>编号</th>
                 <th>厂商名称</th>
-                <th>类型</th>
+                <th>设备类型</th>
+                <th>设备型号</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
             {% for v in page_data.items %}
             <tr>
-                <td class="col-md-2">{{ v.id }}</td>
-                <td class="col-md-2">{{ v.name }}</td>
+                <td class="col-md-1">{{ v.id }}</td>
+                <td class="col-md-1">{{ v.name }}</td>
                 <td class="col-md-2">{{ v.device_type }}</td>
-                <td class="col-md-4">{{ v.remark }}</td>
+                <td class="col-md-3">{{ v.device_model }}</td>
+                <td class="col-md-3">{{ v.remark }}</td>
                 <td class="col-md-2">
                     <a href="{{ url_for('assets.vendor_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
                     <a href="{{ url_for('assets.vendor_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>

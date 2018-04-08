@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: c71aa10cdad4
+Revision ID: 91d6e13006cc
 Revises: 
-Create Date: 2018-04-04 14:17:49.493675
+Create Date: 2018-04-08 16:33:16.861090
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c71aa10cdad4'
+revision = '91d6e13006cc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -79,26 +79,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=128), nullable=False),
     sa.Column('device_type', sa.String(length=64), nullable=False),
+    sa.Column('device_model', sa.String(length=256), nullable=False),
     sa.Column('remark', sa.String(length=256), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('cpu_info',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('cpu_model', sa.String(length=128), nullable=False),
-    sa.Column('cpu_type', sa.String(length=32), nullable=True),
-    sa.Column('cpu_core', sa.SmallInteger(), nullable=True),
-    sa.Column('cpu_thread', sa.SmallInteger(), nullable=True),
-    sa.Column('vendor_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['vendor_id'], ['vendor.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('disk_info',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('disk_model', sa.String(length=128), nullable=False),
-    sa.Column('disk_type', sa.String(length=32), nullable=True),
-    sa.Column('each_capacity', sa.String(length=32), nullable=True),
-    sa.Column('vendor_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['vendor_id'], ['vendor.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('groups_roles',
@@ -114,15 +96,6 @@ def upgrade():
     sa.Column('ip', sa.String(length=128), nullable=True),
     sa.Column('addtime', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('memory_info',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('memory_model', sa.String(length=128), nullable=False),
-    sa.Column('memory_type', sa.String(length=32), nullable=True),
-    sa.Column('each_capacity', sa.String(length=32), nullable=True),
-    sa.Column('vendor_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['vendor_id'], ['vendor.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('network_device',
@@ -151,15 +124,11 @@ def upgrade():
     sa.Column('ip_address', sa.String(length=256), nullable=True),
     sa.Column('mac_address', sa.String(length=256), nullable=True),
     sa.Column('RAID_type', sa.String(length=32), nullable=True),
-    sa.Column('cpu_type', sa.SmallInteger(), nullable=True),
+    sa.Column('cpu_type', sa.String(length=64), nullable=True),
     sa.Column('cpu_count', sa.SmallInteger(), nullable=True),
-    sa.Column('memory_type', sa.SmallInteger(), nullable=True),
-    sa.Column('memory', sa.String(length=32), nullable=True),
-    sa.Column('memory_count', sa.SmallInteger(), nullable=True),
-    sa.Column('disk_type', sa.SmallInteger(), nullable=True),
-    sa.Column('disk', sa.String(length=32), nullable=True),
-    sa.Column('disk_count', sa.SmallInteger(), nullable=True),
-    sa.Column('network_card_type', sa.String(length=32), nullable=True),
+    sa.Column('memory_capacity', sa.String(length=32), nullable=True),
+    sa.Column('disk_capacity', sa.String(length=32), nullable=True),
+    sa.Column('network_card_type', sa.String(length=64), nullable=True),
     sa.Column('network_card_count', sa.Integer(), nullable=True),
     sa.Column('power_count', sa.SmallInteger(), nullable=True),
     sa.Column('remark', sa.String(length=256), nullable=True),
@@ -243,11 +212,8 @@ def downgrade():
     op.drop_table('server')
     op.drop_table('roles_auths')
     op.drop_table('network_device')
-    op.drop_table('memory_info')
     op.drop_table('loginlog')
     op.drop_table('groups_roles')
-    op.drop_table('disk_info')
-    op.drop_table('cpu_info')
     op.drop_table('vendor')
     op.drop_table('user')
     op.drop_table('tag')

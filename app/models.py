@@ -47,7 +47,8 @@ class User(db.Model):
     loginlogs = db.relationship('LoginLog', backref=db.backref('users'))
     is_active = db.Column(db.String(length=32))
     is_admin = db.Column(db.String(length=32))
-    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
@@ -84,7 +85,8 @@ class Role(db.Model):
     name = db.Column(db.String(length=64), nullable=False)
     is_admin = db.Column(db.String(length=32))
     auths = db.relationship('Auth', secondary=roles_auths, backref=db.backref('roles', lazy='dynamic'))
-    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    last_modify_time = db.Column(db.DateTime)
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -97,7 +99,8 @@ class Auth(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(length=64), unique=True, nullable=False)
     url = db.Column(db.String(length=128), unique=True, nullable=False)
-    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    last_modify_time = db.Column(db.DateTime)
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -111,7 +114,8 @@ class Group(db.Model):
     name = db.Column(db.String(length=64), nullable=False)
     roles = db.relationship('Role', secondary=groups_roles, backref=db.backref('groups', lazy='dynamic'))
     is_admin = db.Column(db.String(length=32))
-    addtime = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    last_modify_time = db.Column(db.DateTime)
     description = db.Column(db.String(length=255), nullable=True)
 
     def __repr__(self):
@@ -125,7 +129,7 @@ class LoginLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     operation_type = db.Column(db.String(length=32))
     ip = db.Column(db.String(length=128))
-    addtime = db.Column(db.DateTime)
+    create_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return self.ip
@@ -138,23 +142,21 @@ class Server(db.Model):
     sn_number = db.Column(db.String(length=256), nullable=False)
     name = db.Column(db.String(length=64), nullable=False)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
-    server_model = db.Column(db.String(length=128), nullable=False)
     system_version = db.Column(db.String(length=128))
     ip_address = db.Column(db.String(length=256))
     mac_address = db.Column(db.String(length=256))
     RAID_type = db.Column(db.String(length=32))
-    cpu_type = db.Column(db.SmallInteger)
+    cpu_type = db.Column(db.String(length=64))
     cpu_count = db.Column(db.SmallInteger)
-    memory_type = db.Column(db.SmallInteger)
-    memory = db.Column(db.String(length=32))
-    memory_count = db.Column(db.SmallInteger)
-    disk_type = db.Column(db.SmallInteger)
-    disk = db.Column(db.String(length=32))
-    disk_count = db.Column(db.SmallInteger)
-    network_card_type = db.Column(db.String(length=32))
+    memory_capacity = db.Column(db.String(length=32))
+    disk_type = db.Column(db.String(16))
+    disk_capacity = db.Column(db.String(length=32))
+    network_card_type = db.Column(db.String(length=64))
     network_card_count = db.Column(db.Integer)
     power_count = db.Column(db.SmallInteger)
     groups = db.relationship('HostGroup', secondary=hostgroups_servers, backref=db.backref('servers', lazy='dynamic'))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # server和asset一对一关联
     asset = db.relationship('Assets', backref=db.backref('server', uselist=False))
@@ -171,6 +173,8 @@ class Network_Device(db.Model):
     sn_number = db.Column(db.String(length=128), nullable=False)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
     port_count = db.Column(db.SmallInteger)
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # network_device和asset一对一关联
     asset = db.relationship('Assets', backref=db.backref('network_device', uselist=False))
@@ -187,6 +191,8 @@ class Storage(db.Model):
     sn_number = db.Column(db.String(length=128), nullable=False)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
     amount = db.Column(db.String(length=32))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # storage和asset一对一关联
     asset = db.relationship('Assets', backref=db.backref('storage', uselist=False))
@@ -201,6 +207,8 @@ class HostGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(length=128), nullable=False)
     group_use = db.Column(db.String(length=256), nullable=True)
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
@@ -214,6 +222,8 @@ class IDC(db.Model):
     name = db.Column(db.String(length=128), nullable=False)
     address = db.Column(db.String(length=256))
     assets_id = db.Column(db.Integer, db.ForeignKey('assets.id'))
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
@@ -248,63 +258,25 @@ class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(length=128), nullable=False)
+    create_time = db.Column(db.DateTime, default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
         return self.name
 
 
-# 厂商表
+# 设备基本信息表
 class Vendor(db.Model):
     __tablename__ = 'vendor'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(length=128), nullable=False)
     device_type = db.Column(db.String(length=64), nullable=False)
+    device_model = db.Column(db.String(length=256), nullable=False)
     servers = db.relationship('Server', backref=db.backref('vendors'))
-    cpu = db.relationship('CPUInfo', backref=db.backref('cpu_info'))
-    memory = db.relationship('MemoryInfo', backref=db.backref('memory_info'))
-    disk = db.relationship('DiskInfo', backref=db.backref('disk_info'))
+    create_time = db.Column(db.DateTime, default=datetime.now())
+    last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
 
     def __repr__(self):
-        return self.name
-
-
-# CPU表
-class CPUInfo(db.Model):
-    __tablename__ = 'cpu_info'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    cpu_model = db.Column(db.String(length=128), nullable=False)
-    cpu_type = db.Column(db.String(length=32))
-    cpu_core = db.Column(db.SmallInteger)
-    cpu_thread = db.Column(db.SmallInteger)
-    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
-
-    def __repr__(self):
-        return self.cpu_model
-
-
-# 内存表
-class MemoryInfo(db.Model):
-    __tablename__ = 'memory_info'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    memory_model = db.Column(db.String(length=128), nullable=False)
-    memory_type = db.Column(db.String(length=32))
-    each_capacity = db.Column(db.String(length=32))
-    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
-
-    def __repr__(self):
-        return self.memory_model
-
-
-# 硬盘表
-class DiskInfo(db.Model):
-    __tablename__ = 'disk_info'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    disk_model = db.Column(db.String(length=128), nullable=False)
-    disk_type = db.Column(db.String(length=32))
-    each_capacity = db.Column(db.String(length=32))
-    vendor_id = db.Column(db.Integer, db.ForeignKey('vendor.id'))
-
-    def __repr__(self):
-        return self.disk_model
+        return  '%r | %r | %r' % (self.name, self.device_type, self.device_model)

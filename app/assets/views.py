@@ -4,6 +4,7 @@ from app.models import Server, HostGroup, Assets, Tag, IDC, Vendor
 from app.home.views import login_required
 from app.assets.forms import ServerForm, VendorForm, HostGroupForm
 from app import db
+from datetime import datetime
 
 
 # 主机列表
@@ -22,7 +23,7 @@ def server_list(page=None):
 def server_add():
     form = ServerForm()
     form.groups.choices = [(v.id, v.name) for v in HostGroup.query.all()]
-    form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
+    form.vendor.choices = [(v.id, v) for v in Vendor.query.all()]
     if form.validate_on_submit():
         data = form.data
         server_count = Server.query.filter_by(name=data['name']).count()
@@ -33,21 +34,20 @@ def server_add():
             server = Server(
                 sn_number=data['sn_number'],
                 name=data['name'],
-                cpu_name=data['cpu_name'],
+                system_version=data['system_version'],
+                ip_address=data['ip_address'],
+                mac_address=data['mac_address'],
+                RAID_type=','.join(map(lambda v: str(v), data['RAID_type'])),
+                cpu_type=data['cpu_type'],
                 cpu_count=data['cpu_count'],
-                memory=data['memory'],
-                memory_count=data['memory_count'],
-                disk=data['disk'],
-                disk_count=data['disk_count'],
-                RAID_type=','.join(map(lambda v:str(v), data['RAID_type'])),
+                memory_capacity=data['memory_capacity'],
+                disk_capacity=data['disk_capacity'],
+                disk_type=data['disk_type'],
                 network_card_type=data['network_card_type'],
                 network_card_count=data['network_card_count'],
                 power_count=data['power_count'],
                 vendor_id=int(data['vendor']),
-                ip_address=data['ip_address'],
-                mac_address=data['mac_address'],
-                system_version=data['system_version'],
-                device_model_id=data['device_model'],
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 remark=data['remark'],
             )
             db.session.add(server)
@@ -71,11 +71,11 @@ def server_add():
 def server_edit(id=None):
     form = ServerForm()
     form.groups.choices = [(v.id, v.name) for v in HostGroup.query.all()]
-    form.vendor.choices = [(v.id, v.name) for v in Vendor.query.all()]
+    form.vendor.choices = [(v.id, v) for v in Vendor.query.all()]
     server = Server.query.get_or_404(id)
     if request.method == 'GET':
         form.vendor.data = server.vendor_id
-        form.device_model.data = server.device_model_id
+        form.disk_type.data = server.disk_type
         form.groups.data = [(v.id) for v in server.groups]
         form.RAID_type.data = server.RAID_type
     if form.validate_on_submit():
@@ -86,21 +86,20 @@ def server_edit(id=None):
             return redirect(url_for('assets.server_edit', id=id))
         try:
             server.name = data['name']
-            server.cpu_name = data['cpu_name'],
-            server.cpu_count = data['cpu_count'],
-            server.memory = data['memory'],
-            server.memory_count = data['memory_count'],
-            server.disk = data['disk'],
-            server.disk_count = data['disk_count'],
+            server.system_version = data['system_version'],
+            server.ip_address = data['ip_address'],
+            server.mac_address = data['mac_address'],
             server.RAID_type = ','.join(map(lambda v: str(v), data['RAID_type'])),
+            server.cpu_type = data['cpu_type'],
+            server.cpu_count = data['cpu_count'],
+            server.memory_capacity = data['memory_capacity'],
+            server.disk_capacity = data['disk_capacity'],
+            server.disk_type = data['disk_type'],
             server.network_card_type = data['network_card_type'],
             server.network_card_count = data['network_card_count'],
             server.power_count = data['power_count'],
             server.vendor_id = int(data['vendor']),
-            server.ip_address = data['ip_address'],
-            server.mac_address = data['mac_address'],
-            server.system_version = data['system_version'],
-            server.device_model_id = data['device_model'],
+            server.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             server.remark = data['remark'],
             db.session.add(server)
             db.session.commit()
@@ -295,15 +294,19 @@ def vendor_add():
     form = VendorForm()
     if form.validate_on_submit():
         data = form.data
-        vendor = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).first()
-        vendor_count = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).count()
-        if vendor_count == 1 and vendor.device_type == data['device_type']:
+        vendor = Vendor.query.filter_by(name=data['name'], device_model=data['device_model']).first()
+        vendor_count = Vendor.query.filter_by(name=data['name'], device_model=data['device_model']).count()
+        print(vendor_count)
+        print(data['name'], data['device_type'], data['device_model'])
+        if vendor_count == 1 and vendor.device_model == data['device_model']:
             flash(message='该厂商已存在', category='error')
             return redirect(url_for('assets.vendor_add'))
         try:
             vendor = Vendor(
                 name=data['name'],
                 device_type=data['device_type'],
+                device_model=data['device_model'],
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 remark=data['remark'],
             )
             db.session.add(vendor)
@@ -324,13 +327,16 @@ def vendor_edit(id=None):
         form.device_type.data = vendor.device_type
     if form.validate_on_submit():
         data = form.data
-        vendor_count = Vendor.query.filter_by(name=data['name'], device_type=data['device_type']).count()
-        if (vendor.name != data['name'] and vendor_count == 1) or (vendor.device_type != data['device_type'] and vendor_count == 1):
+        vendor_count = Vendor.query.filter_by(name=data['name'], device_model=data['device_model']).count()
+        if (vendor.name != data['name'] and vendor_count == 1) or (
+                vendor.device_model != data['device_model'] and vendor_count == 1):
             flash(message='该厂商已存在，请重新输入', category='error')
             return redirect(url_for('assets.vendor_edit', id=id))
         try:
             vendor.name = data['name']
             vendor.device_type = data['device_type']
+            vendor.device_model = data['device_model']
+            vendor.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             vendor.remark = data['remark']
             db.session.add(vendor)
             db.session.commit()

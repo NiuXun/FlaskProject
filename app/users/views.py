@@ -5,6 +5,8 @@ from app.models import User, Group, Role, Auth, LoginLog
 from app import db
 from werkzeug.security import generate_password_hash
 from app.home.views import login_required, login_log_add
+from datetime import datetime
+
 
 # 用户列表
 @users.route('/user_list/<int:page>/', methods=['GET'])
@@ -41,6 +43,7 @@ def user_add():
                     company_name=data['company_name'],
                     is_active=data['is_active'],
                     is_admin=data['is_admin'],
+                    last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                     remark=data['remark'],
                 )
                 db.session.add(user)
@@ -78,7 +81,7 @@ def user_edit(id=None):
     if request.method == 'GET':
         form.is_active.data = user.is_active
         form.is_admin.data = user.is_admin
-        form.group.data =[(v.id) for v in user.groups]
+        form.group.data = [(v.id) for v in user.groups]
         form.role.data = [(v.id) for v in user.roles]
     if form.validate_on_submit():
         data = form.data
@@ -94,6 +97,7 @@ def user_edit(id=None):
                 user.company_name = data['company_name']
                 user.is_active = data['is_active']
                 user.is_admin = data['is_admin']
+                user.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 user.remark = data['remark']
                 db.session.add(user)
                 db.session.commit()
@@ -155,6 +159,7 @@ def group_add():
                 group = Group(
                     name=data['name'],
                     is_admin=data['is_admin'],
+                    last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 )
                 db.session.add(group)
                 db.session.commit()
@@ -186,7 +191,7 @@ def group_edit(id=None):
     group = Group.query.get_or_404(id)
     if request.method == 'GET':
         form.is_admin.data = group.is_admin
-        form.roles.data =[(v.id) for v in group.roles]
+        form.roles.data = [(v.id) for v in group.roles]
     if form.validate_on_submit():
         data = form.data
         group_count = Group.query.filter_by(name=data['name']).count()
@@ -198,6 +203,7 @@ def group_edit(id=None):
                 group.name = data['name']
                 group.is_admin = data['is_admin']
                 group.auths = data['auths']
+                group.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 db.session.add(group)
                 db.session.commit()
                 user = User.query.filter_by(username=session['user']).first_or_404()
@@ -255,6 +261,7 @@ def role_add():
                 role = Role(
                     name=data['name'],
                     is_admin=data['is_admin'],
+                    last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 )
                 db.session.add(role)
                 db.session.commit()
@@ -286,7 +293,7 @@ def role_edit(id=None):
     role = Role.query.get_or_404(id)
     if request.method == 'GET':
         form.is_admin.data = role.is_admin
-        form.auths.data =[(v.id) for v in role.auths]
+        form.auths.data = [(v.id) for v in role.auths]
     if form.validate_on_submit():
         data = form.data
         role_count = Auth.query.filter_by(name=data['name']).count()
@@ -298,6 +305,7 @@ def role_edit(id=None):
                 role.name = data['name']
                 role.is_admin = data['is_admin']
                 role.auths = data['auths']
+                role.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 db.session.add(role)
                 db.session.commit()
                 user = User.query.filter_by(username=session['user']).first_or_404()
@@ -354,6 +362,7 @@ def auth_add():
                 auth = Auth(
                     name=data['name'],
                     url=data['url'],
+                    last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 )
                 db.session.add(auth)
                 db.session.commit()
@@ -386,6 +395,7 @@ def auth_edit(id=None):
             try:
                 auth.name = data['name']
                 auth.url = data['url']
+                auth.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 db.session.add(auth)
                 db.session.commit()
                 user = User.query.filter_by(username=session['user']).first_or_404()
