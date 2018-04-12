@@ -46,13 +46,13 @@
             <tr>
                 <td class="col-md-1">{{ v.sn_number }}</td>
                 <td class="col-md-2">{{ v.vendors }}</td>
-                <td class="col-md-2">{{ v.name }}</td>
+                <td class="col-md-1">{{ v.name }}</td>
                 <td class="col-md-1">{{ v.ip_address }}</td>
                 <td class="col-md-1">{{ v.system_version }}</td>
                 <td class="col-md-1">{{ v.cpu_type }}</td>
                 <td class="col-md-1">{{ v.memory_capacity }}</td>
                 <td class="col-md-1">{{ v.disk_capacity }}</td>
-                <td class="col-md-1">{{ v.RAID_type }}</td>
+                <td class="col-md-2">{{ v.RAID_type }}</td>
                 <td class="col-md-1">
                     <a href="{{ url_for('assets.server_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
                     <a href="{{ url_for('assets.server_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>

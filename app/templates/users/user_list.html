@@ -38,6 +38,7 @@
                 <th>所属角色</th>
                 <th>用户状态</th>
                 <th>用户类型</th>
+                <th>最后修改时间</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
@@ -50,7 +51,8 @@
                 <td class="col-md-1">{{ v.roles[0] }}</td>
                 <td class="col-md-1">{{ v.is_active }}</td>
                 <td class="col-md-1">{{ v.is_admin }}</td>
-                <td class="col-md-2">{{ v.remark }}</td>
+                <td class="col-md-2">{{ v.last_modify_time }}</td>
+                <td class="col-md-1">{{ v.remark }}</td>
                 <td class="col-md-1">
                     <a href="{{ url_for('users.user_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
                     <a href="{{ url_for('users.user_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>

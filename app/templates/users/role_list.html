@@ -20,7 +20,7 @@
                 <th>编号</th>
                 <th>角色名称</th>
                 <th>角色类别</th>
-                <th>添加时间</th>
+                <th>最后修改时间</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
@@ -29,7 +29,7 @@
                 <td class="col-md-1">{{ v.id }}</td>
                 <td class="col-md-2">{{ v.name }}</td>
                 <td class="col-md-2">{{ v.is_admin }}</td>
-                <td class="col-md-2">{{ v.addtime }}</td>
+                <td class="col-md-2">{{ v.last_modify_time }}</td>
                 <td class="col-md-2">{{ v.remark }}</td>
                 <td class="col-md-1">
                     <a href="{{ url_for('users.role_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>

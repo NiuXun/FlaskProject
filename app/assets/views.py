@@ -2,7 +2,7 @@ from . import assets
 from flask import render_template, redirect, url_for, flash, request
 from app.models import Server, HostGroup, Assets, Tag, IDC, Vendor
 from app.home.views import login_required
-from app.assets.forms import ServerForm, VendorForm, HostGroupForm
+from app.assets.forms import ServerForm, VendorForm, HostGroupForm, IDCForm, TagForm, AssetsForm
 from app import db
 from datetime import datetime
 
@@ -151,6 +151,7 @@ def host_group_add():
         try:
             host_group = HostGroup(
                 name=data['name'],
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 remark=data['remark'],
             )
             db.session.add(host_group)
@@ -169,12 +170,13 @@ def host_group_edit(id=None):
     host_group = HostGroup.query.get_or_404(id)
     if form.validate_on_submit():
         data = form.data
-        host_group_count = Vendor.query.filter_by(name=data['name']).count()
+        host_group_count = HostGroup.query.filter_by(name=data['name']).count()
         if host_group.name != data['name'] and host_group_count == 1:
             flash(message='该主机组已存在，请重新输入', category='error')
             return redirect(url_for('assets.host_group_edit', id=id))
         try:
             host_group.name = data['name']
+            host_group.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             host_group.remark = data['remark']
             db.session.add(host_group)
             db.session.commit()
@@ -210,19 +212,65 @@ def idc_list(page=None):
 # 新增IDC
 @assets.route('/idc_add/', methods=['GET', 'POST'])
 def idc_add():
-    return render_template('assets/idc_add.html')
+    form = IDCForm()
+    if form.validate_on_submit():
+        data = form.data
+        idc_count = IDC.query.filter_by(name=data['name']).count()
+        if idc_count == 1:
+            flash(message='该机房已存在', category='error')
+            return redirect(url_for('assets.idc_add'))
+        try:
+            idc = IDC(
+                name=data['name'],
+                address=data['address'],
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                remark=data['remark'],
+            )
+            db.session.add(idc)
+            db.session.commit()
+            flash(message='添加机房成功', category='ok')
+            return redirect(url_for('assets.idc_add'))
+        except Exception as e:
+            print(e)
+    return render_template('assets/idc_add.html', form=form)
 
 
 # 编辑IDC
 @assets.route('/idc_edit/<int:id>/', methods=['GET', 'POST'])
 def idc_edit(id=None):
-    return render_template('assets/idc_edit.html')
+    form = IDCForm()
+    idc = IDC.query.get_or_404(id)
+    if form.validate_on_submit():
+        data = form.data
+        idc_count = IDC.query.filter_by(name=data['name']).count()
+        if idc.name != data['name'] and idc_count == 1:
+            flash(message='该机房已存在，请重新输入', category='error')
+            return redirect(url_for('assets.idc_edit', id=id))
+        try:
+            idc.name = data['name']
+            idc.address = data['address']
+            idc.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            idc.remark = data['remark']
+            db.session.add(idc)
+            db.session.commit()
+            flash(message='修改机房信息成功', category='ok')
+            return redirect(url_for('assets.idc_edit', id=id))
+        except Exception as e:
+            print(e)
+    return render_template('assets/idc_edit.html', form=form, idc=idc)
 
 
 # 删除IDC
 @assets.route('/idc_delete/<int:id>/', methods=['GET'])
 def idc_delete(id=None):
-    return redirect(url_for('assets.idc_list', page=1))
+    idc = IDC.query.filter_by(id=id).first_or_404()
+    try:
+        db.session.delete(idc)
+        db.session.commit()
+        flash(message='删除机房成功', category='ok')
+        return redirect(url_for('assets.idc_list', page=1))
+    except Exception as e:
+        print(e)
 
 
 # 资产列表
@@ -237,7 +285,11 @@ def assets_list(page=None):
 # 新增资产
 @assets.route('/assets_add/', methods=['GET', 'POST'])
 def assets_add():
-    return render_template('assets/assets_add.html')
+    form = AssetsForm()
+    form.device_name.choices = [(v.id, v.name) for v in Server.query.all()]
+    if form.validate_on_submit():
+        data = form.data
+    return render_template('assets/assets_add.html', form=form)
 
 
 # 编辑资产
@@ -264,19 +316,63 @@ def tag_list(page=None):
 # 新增标签
 @assets.route('/tag_add/', methods=['GET', 'POST'])
 def tag_add():
-    return render_template('assets/tag_add.html')
+    form = TagForm()
+    if form.validate_on_submit():
+        data = form.data
+        tag_count = Tag.query.filter_by(name=data['name']).count()
+        if tag_count == 1:
+            flash(message='该标签已存在', category='error')
+            return redirect(url_for('assets.tag_add'))
+        try:
+            tag = Tag(
+                name=data['name'],
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                remark=data['remark'],
+            )
+            db.session.add(tag)
+            db.session.commit()
+            flash(message='添加标签成功', category='ok')
+            return redirect(url_for('assets.tag_add'))
+        except Exception as e:
+            print(e)
+    return render_template('assets/tag_add.html', form=form)
 
 
 # 编辑标签
 @assets.route('/tag_edit/<int:id>/', methods=['GET', 'POST'])
 def tag_edit(id=None):
-    return render_template('assets/tag_edit.html')
+    form = TagForm()
+    tag = Tag.query.get_or_404(id)
+    if form.validate_on_submit():
+        data = form.data
+        tag_count = Tag.query.filter_by(name=data['name']).count()
+        if tag.name != data['name'] and tag_count == 1:
+            flash(message='该标签已存在，请重新输入', category='error')
+            return redirect(url_for('assets.tag_edit', id=id))
+        try:
+            tag.name = data['name']
+            tag.last_modify_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            tag.remark = data['remark']
+            db.session.add(tag)
+            db.session.commit()
+            flash(message='修改标签成功', category='ok')
+            return redirect(url_for('assets.tag_edit', id=id))
+        except Exception as e:
+            print(e)
+    return render_template('assets/tag_edit.html', form=form, tag=tag)
 
 
 # 删除标签
 @assets.route('/tag_delete/<int:id>/', methods=['GET'])
 def tag_delete(id=None):
-    return redirect(url_for('assets.tag_list', page=1))
+    tag = Tag.query.filter_by(id=id).first_or_404()
+    try:
+        db.session.delete(tag)
+        db.session.commit()
+        flash(message='删除标签成功', category='ok')
+        return redirect(url_for('assets.tag_list', page=1))
+    except Exception as e:
+        print(e)
 
 
 # 厂商列表

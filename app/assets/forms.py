@@ -296,3 +296,214 @@ class HostGroupForm(FlaskForm):
             'class': 'btn btn-success btn-block',
         }
     )
+
+
+class IDCForm(FlaskForm):
+    name = StringField(
+        label='机房名称',
+        validators=[
+            DataRequired(message='请输入机房名称 ！'),
+        ],
+        description='机房名称',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入机房名称',
+            # 'required': 'required',
+        }
+    )
+    address = StringField(
+        label='机房地址',
+        validators=[
+            DataRequired(message='请输入机房地址 ！'),
+        ],
+        description='机房地址',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入机房地址',
+            # 'required': 'required',
+        }
+    )
+    remark = TextAreaField(
+        label='备注',
+        description='备注',
+        render_kw={
+            'class': 'form-control',
+            'id': 'inputRemark',
+            'rows': 5,
+        }
+    )
+    submit = SubmitField(
+        '提交',
+        render_kw={
+            'class': 'btn btn-success btn-block',
+        }
+    )
+
+
+class TagForm(FlaskForm):
+    name = StringField(
+        label='标签名称',
+        validators=[
+            DataRequired(message='请输入标签名称 ！'),
+        ],
+        description='标签名称',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入标签名称',
+            # 'required': 'required',
+        }
+    )
+    remark = TextAreaField(
+        label='备注',
+        description='备注',
+        render_kw={
+            'class': 'form-control',
+            'id': 'inputRemark',
+            'rows': 5,
+        }
+    )
+    submit = SubmitField(
+        '提交',
+        render_kw={
+            'class': 'btn btn-success btn-block',
+        }
+    )
+
+
+class AssetsForm(FlaskForm):
+    assets_number = IntegerField(
+        label='资产编号',
+        validators=[
+          DataRequired(message='请输入资产编号！'),
+        ],
+        description='资产编号',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入资产编号',
+            # 'required': 'required',
+        }
+    )
+    name = StringField(
+        label='资产名称',
+        validators=[
+            DataRequired(message='请输入资产名称！'),
+        ],
+        description='资产名称',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入资产名称',
+            # 'required': 'required',
+        }
+    )
+    location = StringField(
+        label='资产位置',
+        validators=[
+            DataRequired(message='请输入资产位置！'),
+        ],
+        description='资产位置',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入资产位置',
+            # 'required': 'required',
+        }
+    )
+    use = StringField(
+        label='资产用途',
+        validators=[
+            DataRequired(message='请输入资产用途！'),
+        ],
+        description='资产用途',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入资产用途',
+            # 'required': 'required',
+        }
+    )
+    nature = StringField(
+        label='资产性质',
+        validators=[
+            DataRequired(message='请输入资产性质！'),
+        ],
+        description='资产性质',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入资产性质',
+            # 'required': 'required',
+        }
+    )
+    tags = SelectMultipleField(
+        label='标签',
+        coerce=int,
+        choices=[],
+        description='标签',
+        render_kw={
+            'class': 'form-control col-md-5',
+        }
+    )
+    idc_id = SelectField(
+        label='所属机房',
+        description='所属机房',
+        coerce=int,
+        choices=[],
+        render_kw={
+            'class': 'form-control',
+        }
+    )
+    manage_ip = StringField(
+        label='管理IP',
+        validators=[
+            DataRequired(message='请输入管理IP地址 ！'),
+            IPAddress(ipv4=True, message='请输入正确的管理IP地址'),
+        ],
+        description='管理IP',
+        render_kw={
+            'class': 'form-control',
+            'placeholder': '请输入管理IP地址',
+            # 'required': 'required',
+        }
+    )
+    device_type = SelectField(
+        label='设备类型',
+        description='设备类型',
+        coerce=str,
+        choices=[('服务器','服务器'),('网络设备','网络设备'),('存储设备','存储设备')],
+        render_kw={
+            'class': 'form-control',
+            'id': 'type',
+            'onChange':"type_select();",
+        }
+    )
+    device_status = SelectField(
+        label='设备状态',
+        description='设备状态',
+        coerce=str,
+        choices=[('上架', '上架'), ('下架', '下架'), ('未用', '未用')],
+        render_kw={
+            'class': 'form-control',
+        }
+    )
+    device_name = SelectField(
+        label='设备名称',
+        description='设备名称',
+        coerce=str,
+        choices=[],
+        render_kw={
+            'class': 'form-control',
+            'id': 'select_device_name',
+        }
+    )
+    remark = TextAreaField(
+        label='备注',
+        description='备注',
+        render_kw={
+            'class': 'form-control',
+            'id': 'inputRemark',
+            'rows': 5,
+        }
+    )
+    submit = SubmitField(
+        '提交',
+        render_kw={
+            'class': 'btn btn-success btn-block',
+        }
+    )

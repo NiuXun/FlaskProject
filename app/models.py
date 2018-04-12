@@ -57,7 +57,8 @@ class User(db.Model):
     @staticmethod
     def create_super_user(username, password):
         from werkzeug.security import generate_password_hash
-        if User.query.filter_by(username='admin').count() == 0:
+        user_count = User.query.filter_by(username='admin').count()
+        if user_count == 0:
             user = User(
                 username=username,
                 password=generate_password_hash(password),
@@ -67,6 +68,7 @@ class User(db.Model):
                 company_name='',
                 is_active='有效',
                 is_admin='系统管理员',
+                last_modify_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 remark='',
             )
             db.session.add(user)
@@ -159,7 +161,7 @@ class Server(db.Model):
     last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # server和asset一对一关联
-    asset = db.relationship('Assets', backref=db.backref('server', uselist=False))
+    asset_id = db.Column(db.Integer, db.ForeignKey('assets.id'))
 
     def __repr__(self):
         return self.name
@@ -177,7 +179,7 @@ class Network_Device(db.Model):
     last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # network_device和asset一对一关联
-    asset = db.relationship('Assets', backref=db.backref('network_device', uselist=False))
+    asset_id = db.Column(db.Integer, db.ForeignKey('assets.id'))
 
     def __repr__(self):
         return self.name
@@ -195,7 +197,7 @@ class Storage(db.Model):
     last_modify_time = db.Column(db.DateTime)
     remark = db.Column(db.String(length=256), nullable=True)
     # storage和asset一对一关联
-    asset = db.relationship('Assets', backref=db.backref('storage', uselist=False))
+    asset_id = db.Column(db.Integer, db.ForeignKey('assets.id'))
 
     def __repr__(self):
         return self.name
@@ -242,12 +244,15 @@ class Assets(db.Model):
     tags = db.relationship('Tag', secondary=assets_tags, backref=db.backref('assets', lazy='dynamic'))
     idc_id = db.relationship('IDC', backref=db.backref('assets'))
     manage_ip = db.Column(db.String(length=256))
+    device_status = db.Column(db.String(length=32))
+    device_type = db.Column(db.String(length=32))
     create_time = db.Column(db.DateTime, default=datetime.now())
     last_modify_time = db.Column(db.DateTime, default=datetime.now())
-    server_id = db.Column(db.Integer, db.ForeignKey('server.id'))
-    network_device_id = db.Column(db.Integer, db.ForeignKey('network_device.id'))
-    storage_id = db.Column(db.Integer, db.ForeignKey('storage.id'))
     remark = db.Column(db.String(length=256), nullable=True)
+
+    servers = db.relationship('Server', backref=db.backref('assets', uselist=False))
+    network_devices = db.relationship('Network_Device', backref=db.backref('assets', uselist=False))
+    storages = db.relationship('Storage', backref=db.backref('assets', uselist=False))
 
     def __repr__(self):
         return self.name

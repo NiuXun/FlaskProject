@@ -101,6 +101,8 @@ def user_edit(id=None):
                 user.remark = data['remark']
                 db.session.add(user)
                 db.session.commit()
+
+
                 user = User.query.filter_by(username=session['user']).first_or_404()
                 login_log_add(user_id=user.id, operation_type='编辑用户', ip_address=request.remote_addr)
                 flash(message='修改用户信息成功', category='ok')

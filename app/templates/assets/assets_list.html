@@ -9,10 +9,10 @@
 
 {% block body_main %}
     <div class="row">
-        <a href="{{ url_for('assets.server_add') }}">
+        <a href="{{ url_for('assets.assets_add') }}">
             <button class="btn btn-success">新增资产</button>
         </a>
-        {{ pg.page(page_data, 'assets.server_list') }}
+        {{ pg.page(page_data, 'assets.assets_list') }}
     </div>
     <div class="row">
         {% for msg in get_flashed_messages(category_filter=['ok']) %}
@@ -56,8 +56,8 @@
                 <td class="col-md-1">{{ v.create_time }}</td>
                 <td class="col-md-1">{{ v.last_modify_time }}</td>
                 <td class="col-md-2">
-                    <a href="{{ url_for('assets.host_group_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
-                    <a href="{{ url_for('assets.host_group_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
+                    <a href="{{ url_for('assets.assets_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
+                    <a href="{{ url_for('assets.assets_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
                 </td>
             </tr>
             {% endfor %}

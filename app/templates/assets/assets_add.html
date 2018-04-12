@@ -1,10 +1,157 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'home/base_site.html' %}
 
-</body>
-</html>
+{% block title %}新增资产{% endblock %}
+
+{% block other_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/assets_add.css') }}">
+{% endblock %}
+
+{% block body_main %}
+    <div class="form-group" id="main_body">
+        <div class="page-header" id="add_user_title">
+            <div class="container" id="add_user_title_container">
+                <h3>新增资产</h3>
+            </div>
+        </div>
+        <form class="form-horizontal" id="form_body" method="post">
+            {{ form.csrf_token }}
+            {% for msg in get_flashed_messages(category_filter=['ok']) %}
+                <div class="alert alert-success alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作成功</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            {% for msg in get_flashed_messages(category_filter=['error']) %}
+                <div class="alert alert-danger alert-dismissible" id="msg_title">
+                    <button class="close" type="button" data-dismiss="alert" aria-atomic="true">x</button>
+                    <h4>操作失败</h4>
+                    <p>{{ msg }}</p>
+                </div>
+            {% endfor %}
+            <div class="form-group" id="fields">
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.assets_number.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.assets_number }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.name.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.name }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.location.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.location }}</div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.assets_number.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+                {% for err in form.name.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+                {% for err in form.location.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.nature.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.nature }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.use.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.use }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.manage_ip.label }}</label>
+                <div class="col-md-3" id="rows">{{ form.manage_ip }}</div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.nature.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+                {% for err in form.use.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+                {% for err in form.manage_ip.errors %}
+                    <div class="col-md-4">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.idc_id.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.idc_id }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_status.label }}</label>
+                <div class="col-md-2" id="rows">{{ form.device_status }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_type.label }}</label>
+                <div class="col-md-2" id="device_type">{{ form.device_type }}</div>
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.device_name.label }}</label>
+                <div class="col-md-2" id="device_name">{{ form.device_name }}</div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.idc_id.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+                {% for err in form.device_status.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+                {% for err in form.device_type.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+                {% for err in form.device_name.errors %}
+                    <div class="col-md-3">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-3"></div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputUsername" class="col-md-1 control-label">{{ form.tags.label }}</label>
+                <div class="col-md-11" id="rows">{{ form.tags }}</div>
+            </div>
+            <div class="form-group" id="fields_error">
+                {% for err in form.tags.errors %}
+                    <div class="col-md-12">{{ err }}</div>
+                {% else %}
+                    <div class="col-md-12"></div>
+                {% endfor %}
+            </div>
+            <div class="form-group" id="fields">
+                <label for="inputRemark" class="col-md-1 control-label">{{ form.remark.label }}</label>
+                <div class="col-md-11">
+                    {{ form.remark }}
+                </div>
+            </div>
+            <div class="form-group" id="submit_cancel">
+                <div class="col-sm-offset-3 col-md-2">
+                    {{ form.submit }}
+                </div>
+                <div class="col-sm-offset-2 col-md-2">
+                    <a href="{{ url_for('assets.assets_list', page=1) }}" class="btn btn-danger btn-block">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block other_js %}
+{#    <script type="text/javascript" src="{{ url_for('static', filename='assets/js/assets_select.js') }}"></script>#}
+    <script type="text/javascript">
+        type_select = function () {
+            var selected = document.getElementById('type');
+            if (selected.value == "服务器") {
+                var result = document.getElementById('select_device_name');
+            }else if (selected.value == "网络设备") {
+                alert('这是网络设备');
+            } else {
+                alert('这是存储设备');
+            }
+        };
+    </script>
+{% endblock %}

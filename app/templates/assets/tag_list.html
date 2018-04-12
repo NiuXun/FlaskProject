@@ -9,10 +9,10 @@
 
 {% block body_main %}
     <div class="row">
-        <a href="{{ url_for('assets.server_add') }}">
+        <a href="{{ url_for('assets.tag_add') }}">
             <button class="btn btn-success">新增标签</button>
         </a>
-        {{ pg.page(page_data, 'assets.server_list') }}
+        {{ pg.page(page_data, 'assets.tag_list') }}
     </div>
     <div class="row">
         {% for msg in get_flashed_messages(category_filter=['ok']) %}
@@ -33,17 +33,19 @@
             <tr class="active">
                 <th>编号</th>
                 <th>标签名称</th>
+                <th>最后修改时间</th>
                 <th>备注</th>
                 <th>操作</th>
             </tr>
             {% for v in page_data.items %}
             <tr>
                 <td class="col-md-1">{{ v.id }}</td>
-                <td class="col-md-1">{{ v.name }}</td>
-                <td class="col-md-1">{{ v.remark }}</td>
+                <td class="col-md-2">{{ v.name }}</td>
+                <td class="col-md-2">{{ v.last_modify_time }}</td>
+                <td class="col-md-2">{{ v.remark }}</td>
                 <td class="col-md-1">
-                    <a href="{{ url_for('assets.host_group_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
-                    <a href="{{ url_for('assets.host_group_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
+                    <a href="{{ url_for('assets.tag_edit', id=v.id) }}" class="btn btn-warning btn-xs" id="button">编辑</a>
+                    <a href="{{ url_for('assets.tag_delete', id=v.id) }}" class="btn btn-danger btn-xs" id="button">删除</a>
                 </td>
             </tr>
             {% endfor %}

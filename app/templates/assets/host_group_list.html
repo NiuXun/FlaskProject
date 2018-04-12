@@ -12,7 +12,7 @@
         <a href="{{ url_for('assets.host_group_add') }}">
             <button class="btn btn-success">新增主机组</button>
         </a>
-        {{ pg.page(page_data, 'assets.server_list') }}
+        {{ pg.page(page_data, 'assets.host_group_list') }}
     </div>
     <div class="row">
         {% for msg in get_flashed_messages(category_filter=['ok']) %}
